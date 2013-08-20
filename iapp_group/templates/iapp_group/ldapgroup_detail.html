@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{ object.cn }}
+{{ object.gidNumber }}
+{{ object.memberUid }}
+<a href="{% url 'group_edit' object.cn %}">Edit</a>
+{% endblock content %}

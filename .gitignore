@@ -1,0 +1,20 @@
+# File types #
+##############
+*.pyc
+*.swo
+*.swp
+*.swn
+*.sqlite3
+*.sql
+
+# Directories #
+###############
+logs/
+
+# Specific files #
+##################
+local_settings.py
+
+# OS generated files #
+######################
+*~

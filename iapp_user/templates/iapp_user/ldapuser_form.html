@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+{% endblock css %}
+
+{% block js %}
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script>
+$(function() {
+    $(".date").datepicker({ dateFormat: 'dd.mm.yy' });
+    $("#addGroupInput").click(function() {
+        $("<input type='text' value='' />")
+            .attr("name", "userGroups")
+            .insertBefore("#addGroupInput");
+        return false;
+    });
+});
+</script>
+{% endblock js %}
+
+{% block content %}
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    {% for group in userGroups %}
+        <input type="text" name="userGroups" value="{{ group.cn }}" />
+    {% endfor %}
+    <button id="addGroupInput">+</button>
+    <input type="submit" value="Abschicken" />
+</form>
+{% endblock content %}

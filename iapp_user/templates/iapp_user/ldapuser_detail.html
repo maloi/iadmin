@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{ object.dn }}
+{{ object.first_name }}
+{{ user_groups }}
+<a href="{% url 'user_edit' object.uid %}">Edit</a>
+{% endblock content %}

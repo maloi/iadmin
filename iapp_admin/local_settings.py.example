@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+
+ADMINS = (
+    ('admin', 'admin@localhost'),
+)
+
+MANAGERS = ADMINS
+
+DATABASES = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sql',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    },
+    'ldap': {
+        'ENGINE': 'ldapdb.backends.ldap',
+        'NAME': 'ldap://10.0.0.2/',
+        'USER': 'cn=admin,dc=domain',
+        'PASSWORD': 'xxxxxx',
+     }
+}
+DATABASE_ROUTERS = ['ldapdb.router.Router']
+
+SAMBA_SID = 'S-1-5-21-3463456345-3464363465-345634564'
+DEFAULT_SHELL = '/bin/bash'
+
+# for unicode use u"" like under EMPLOYEETYPES u"Laborräume"
+TITLES = (
+    ("Prof.", "Prof."),
+    ("Dr.", "Dr."),
+)
+
+EMPLOYEETYPES = (
+    (u"Laborräume", u"Laborräume"),
+    ("Werkstatt", "Werkstatt"),
+)
+
+TEAMS = (
+    ("werkstatt", "werkstatt"),
+    ("laborratten", "laborratten"),
+)
+
+ORDERINGS = (
+    ("30", "30: Dr."),
+    ("10", "10: Prof."),
+    ("1", "1: Chef"),
+)
