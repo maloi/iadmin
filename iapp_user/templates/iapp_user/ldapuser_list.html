@@ -1,5 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
 <ul>
   {% for user in object_list %}
       <li>{{ user.cn }} <a href="{% url 'user_detail' user.uid %}">Details</a> <a href="{% url 'user_edit' user.uid %}">Edit</a></li>
   {% endfor %}
 </ul>
+{% endblock content %}

@@ -1,5 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
 <ul>
   {% for group in object_list %}
   <li>{{ group.cn }} <a href="{% url 'group_detail' group.cn %}">Details</a> <a href="{% url 'group_edit' group.cn %}">Edit</a></li>
   {% endfor %}
 </ul>
+{% endblock content %}
