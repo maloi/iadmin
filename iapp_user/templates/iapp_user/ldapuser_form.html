@@ -11,10 +11,17 @@
 $(function() {
     $(".date").datepicker({ dateFormat: 'dd.mm.yy' });
     $("#addGroupInput").click(function() {
-        $("<input type='text' value='' />")
-            .attr("name", "userGroups")
+        event.preventDefault();
+        $("<li><input type='text' name='userGroups' value='' /><button>-</button></li>")
             .insertBefore("#addGroupInput");
-        return false;
+        $("#groupList li:last > button").click(function() {
+            event.preventDefault();
+            $(this).parent().remove();
+        });
+    });
+    $("li > button").click(function() {
+        event.preventDefault();
+        $(this).parent().remove();
     });
 });
 </script>
@@ -23,10 +30,12 @@ $(function() {
 {% block content %}
 <form action="" method="post">{% csrf_token %}
     {{ form.as_p }}
+    <ul id="groupList">
     {% for group in userGroups %}
-        <input type="text" name="userGroups" value="{{ group.cn }}" />
+        <li><input type="text" name="userGroups" value="{{ group.cn }}" /><button>-</button></li>
     {% endfor %}
     <button id="addGroupInput">+</button>
+    </ul>
     <input type="submit" value="Abschicken" />
 </form>
 {% endblock content %}

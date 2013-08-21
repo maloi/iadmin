@@ -3,6 +3,8 @@ from django.conf import settings
 from ldapdb.models.fields import CharField, ImageField, IntegerField, ListField
 import ldapdb.models
 
+from iapp_user.utils import debug
+
 
 class LdapGroup(ldapdb.models.Model):
     """

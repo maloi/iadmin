@@ -4,11 +4,40 @@
 {% endblock css %}
 
 {% block js %}
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script>
+$(function() {
+    $("#addMemberInput").click(function() {
+        event.preventDefault();
+        $("<li><input type='text' name='memberUid' value='' /><button>-</button></li>")
+            .insertBefore("#addMemberInput");
+        $("#memberList li:last > button").click(function() {
+            event.preventDefault();
+            $(this).parent().remove();
+        });
+    });
+    $("li > button").click(function() {
+        event.preventDefault();
+        $(this).parent().remove();
+    });
+});
+</script>
 {% endblock js %}
 
 {% block content %}
 <form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Abschicken" />
+    <p><label for="{{ form.dn.auto_id }}">{{ form.dn.label }}: </label>{{ form.dn }}</p>
+    <p><label for="{{ form.cn.auto_id }}">{{ form.cn.label }}: </label>{{ form.cn }}</p>
+    <p><label for="{{ form.gidNumber.auto_id }}">{{ form.gidNumber.label }}: </label>{{ form.gidNumber }}</p>
+    <p><label for="{{ form.description.auto_id }}">{{ form.description.label }}: </label>{{ form.description }}</p>
+    <p><label for="{{ form.mail.auto_id }}">{{ form.mail.label }}: </label>{{ form.mail }}</p>
+    <p><label for="{{ form.owner.auto_id }}">{{ form.owner.label }}: </label>{{ form.owner }}</p>
+    <ul id="memberList">
+    {% for member in form.memberUid.value %}
+        <li><input type="text" name="memberUid" value="{{ member }}" /><button>-</button></li>
+    {% endfor %}
+    <button id="addMemberInput">+</button>
+    </ul>
+    <input type="submit" value="Abschicken">
 </form>
 {% endblock content %}
