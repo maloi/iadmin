@@ -1,10 +1,11 @@
 from django.conf import settings
+from django.db import models
 
-from ldapdb.models.fields import CharField, ImageField, IntegerField, ListField
+from ldapdb.models.fields import CharField, IntegerField, ListField, ImageField
 import ldapdb.models
 
 from iapp_group.models import LdapGroup
-from .utils import date2timestamp, get_or_none, debug
+from .utils import date2timestamp, get_or_none, debug, getPhotoPath
 
 
 class LdapUser(ldapdb.models.Model):
@@ -22,16 +23,17 @@ class LdapUser(ldapdb.models.Model):
 
     # inetOrgPerson
     title = CharField(db_column='title', choices=settings.TITLES, blank=True)
-    givenName = CharField(db_column='givenName')
+    givenName = CharField(db_column='givenName', blank=True)
     sn = CharField(db_column='sn')
     cn = CharField(db_column='cn')
-    mail = CharField(db_column='mail')
+    mail = CharField(db_column='mail', blank=True)
     telephoneNumber = CharField(db_column='telephoneNumber', blank=True)
     facsimileTelephoneNumber = CharField(db_column='facsimileTelephoneNumber', blank=True)
     mobile = CharField(db_column='mobile', blank=True)
-    employeeType = CharField(db_column='employeeType', choices=settings.EMPLOYEETYPES)
-    team = CharField(db_column='description', choices=settings.TEAMS)
-    # photo = ImageField(db_column='jpegPhoto')
+    employeeType = CharField(db_column='employeeType', choices=settings.EMPLOYEETYPES, blank=True)
+    team = CharField(db_column='description', choices=settings.TEAMS, blank=True)
+    photo = models.ImageField(upload_to=getPhotoPath)
+    jpegPhoto = ImageField(db_column='jpegPhoto', blank=True)
 
     # posixAccount
     uidNumber = IntegerField(db_column='uidNumber', unique=True)
@@ -71,4 +73,5 @@ class LdapUser(ldapdb.models.Model):
 
     def __unicode__(self):
         return self.cn
+
 

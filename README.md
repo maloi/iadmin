@@ -1,4 +1,8 @@
 # Installation
+```bash
+sudo apt-get install libjpeg libjpeg-dev # for jpeg picture upload
+```
+
 ```python
 pip install -r requirements.txt
 ```
