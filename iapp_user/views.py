@@ -43,7 +43,7 @@ class UserUpdate(UpdateView):
         context = super(self.__class__, self).get_context_data(**kwargs)
         context['userGroups'] = LdapGroup.objects.filter(memberUid__contains=context['object'].uid)
         fullname = self.object.gecos.replace(' ', '_')
-        context['photoUrl'] = fullname + '/' + fullname + '-original.jpg'
+        context['photoUrl'] = fullname + '/' + fullname + '-200x200.jpg'
         return context
 
     def form_valid(self, form):
@@ -63,6 +63,8 @@ class UserUpdate(UpdateView):
         image = Image.open(absPath)
         imagefit = ImageOps.fit(image, (640, 512), Image.ANTIALIAS)
         imagefit.save(fileName + '-640x512.jpg', 'JPEG', quality=75)
+        imagefit = ImageOps.fit(image, (200, 200), Image.ANTIALIAS)
+        imagefit.save(fileName + '-200x200.jpg', 'JPEG', quality=75)
         self.object.save(userGroups=userGroups)
         return redirect(self.get_success_url())
 
