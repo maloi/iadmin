@@ -1,4 +1,6 @@
+import os
 import base64
+import time
 
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
@@ -7,10 +9,13 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.utils import simplejson
 from django.http import HttpResponse
+from django.conf import settings
+
+from PIL import Image, ImageOps
 
 from .models import LdapUser
 from .forms import LdapUserForm
-from .utils import timestamp2date, debug
+from .utils import timestamp2date, debug, getPhotoPath
 from iapp_group.models import LdapGroup
 
 
@@ -44,12 +49,20 @@ class UserUpdate(UpdateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         userGroups = self.request.POST.getlist('userGroups')
-        userGroups = [g for g in userGroups if g] # filter empty strings
+        userGroups = sorted([g for g in userGroups if g]) # filter empty strings
         photo = self.request.FILES['photo']
-        self.object.photo.save(self.object.photo.path, photo, save=False)
+        path = getPhotoPath(self.object, self.object.photo.path)
+        absPath = settings.MEDIA_ROOT + path
+        if os.path.exists(absPath):
+            os.rename(absPath, absPath + time.strftime("-%Y%m%d-%H%M%S"))
+        self.object.photo.save(path, photo, save=False)
         photo.open()
         self.object.jpegPhoto = photo.read()
         photo.close()
+        fileName, fileExtension = os.path.splitext(absPath)
+        image = Image.open(absPath)
+        imagefit = ImageOps.fit(image, (640, 512), Image.ANTIALIAS)
+        imagefit.save(fileName + '-640x512.jpg', 'JPEG', quality=75)
         self.object.save(userGroups=userGroups)
         return redirect(self.get_success_url())
 

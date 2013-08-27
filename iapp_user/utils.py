@@ -25,4 +25,4 @@ def getPhotoPath(instance, filename):
     import os
     fileName, fileExtension = os.path.splitext(filename)
     fullName = instance.gecos.replace(' ', '_')
-    return fullName + '/' + fullName + '-original' + fileExtension
+    return fullName + '/' + fullName + fileExtension

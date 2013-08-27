@@ -48,7 +48,7 @@ class LdapUser(ldapdb.models.Model):
     deIappBirthday = CharField(db_column='deIappBirthday', blank=True)
 
     def save(self, *args, **kwargs):
-        userGroups = kwargs.pop('userGroups', None)
+        userGroups = kwargs.pop('userGroups', [])
         newUserGroups = map(lambda g: get_or_none(LdapGroup, cn=g), userGroups)
         newUserGroups = filter(None, newUserGroups)
         currentUserGroups = LdapGroup.objects.filter(memberUid__contains=self.uid)
