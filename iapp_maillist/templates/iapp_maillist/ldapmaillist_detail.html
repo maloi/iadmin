@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{ object.cn }}
+{{ object.member }}
+<a href="{% url 'maillist_edit' object.cn %}">Edit</a>
+{% endblock content %}
