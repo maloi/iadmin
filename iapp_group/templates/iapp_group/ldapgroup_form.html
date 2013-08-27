@@ -71,4 +71,9 @@ $(function() {
     <p><button id="addMemberInput">+</button></p>
     <input type="submit" value="Abschicken">
 </form>
+<ul>
+{% for member in invalidMembers %}
+    <li>{{ member }}</li>
+{% endfor %}
+</ul>
 {% endblock content %}

@@ -6,7 +6,7 @@ from django.views.generic.detail import DetailView
 
 from .models import LdapGroup
 from iapp_user.models import LdapUser
-from iapp_user.utils import debug
+from iapp_user.utils import debug, get_or_none
 
 class GroupList(ListView):
     model = LdapGroup
@@ -21,9 +21,21 @@ class GroupUpdate(UpdateView):
         sortedMembers = sorted(self.object.memberUid)
         sortedMembersDict = []
         for member in sortedMembers:
-          m = LdapUser.objects.get(uid=member)
-          sortedMembersDict.append({'cn': m.cn, 'uid': member})
+            m = get_or_none(LdapUser, uid=member)
+            if m:
+              sortedMembersDict.append({'cn': m.cn, 'uid': member})
         return { 'memberUid': sortedMembersDict }
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        members = self.object.memberUid
+        invalidMembers = []
+        for member in members:
+            m = get_or_none(LdapUser, uid=member)
+            if not m:
+              invalidMembers.append(member)
+        context['invalidMembers'] = sorted(invalidMembers)
+        return context
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
