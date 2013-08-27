@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name="home.html")),
     url(r'^user/', include('iapp_user.urls')),
     url(r'^group/', include('iapp_group.urls')),
+    url(r'^maillist/', include('iapp_maillist.urls')),
     url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
 
