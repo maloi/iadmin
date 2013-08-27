@@ -5,6 +5,8 @@ from django.core.urlresolvers import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
+from django.utils import simplejson
+from django.http import HttpResponse
 
 from .models import LdapUser
 from .forms import LdapUserForm
@@ -60,3 +62,11 @@ class UserDetail(DetailView):
         context['user_groups'] = LdapGroup.objects.filter(memberUid__contains=context['object'].uid)
         return context
 
+
+def ajax_user_autocomplete(request):
+    if 'term' in request.GET:
+        users = LdapUser.objects.filter(
+            cn__icontains=request.GET['term']
+        )
+        return HttpResponse( simplejson.dumps( [ {'label': user.cn, 'value': user.uid} for user in users ] ) )
+    return HttpResponse()

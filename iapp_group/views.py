@@ -5,6 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 
 from .models import LdapGroup
+from iapp_user.models import LdapUser
 from iapp_user.utils import debug
 
 class GroupList(ListView):
@@ -17,7 +18,12 @@ class GroupUpdate(UpdateView):
     model = LdapGroup
 
     def get_initial(self):
-        return { 'memberUid': sorted(self.object.memberUid) }
+        sortedMembers = sorted(self.object.memberUid)
+        sortedMembersDict = []
+        for member in sortedMembers:
+          m = LdapUser.objects.get(uid=member)
+          sortedMembersDict.append({'cn': m.cn, 'uid': member})
+        return { 'memberUid': sortedMembersDict }
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -31,3 +37,5 @@ class GroupUpdate(UpdateView):
 
 class GroupDetail(DetailView):
     model = LdapGroup
+
+
