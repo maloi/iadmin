@@ -17,6 +17,7 @@ from .models import LdapUser
 from .forms import LdapUserForm
 from .utils import timestamp2date, debug, getPhotoPath
 from iapp_group.models import LdapGroup
+from iapp_room.models import LdapRoom
 
 
 class UserList(ListView):
@@ -35,6 +36,11 @@ class UserUpdate(UpdateView):
         initial = {}
         if self.object.deIappBirthday:
             initial['deIappBirthday'] = timestamp2date(self.object.deIappBirthday)
+        roomNumber = self.object.roomNumber
+        telephoneNumber = self.object.telephoneNumber
+        room = LdapRoom.objects.filter(cn__contains=roomNumber).filter(cn__contains=telephoneNumber)
+        if len(room) > 0:
+            initial['room'] = room[0].pk
         return initial
 
     def get_success_url(self):
@@ -51,6 +57,12 @@ class UserUpdate(UpdateView):
         self.object = form.save(commit=False)
         userGroups = self.request.POST.getlist('userGroups')
         userGroups = sorted([g for g in userGroups if g]) # filter empty strings
+        room = form.cleaned_data.get('room')
+        if room:
+            import re
+            s = re.search('([\w\s]+\w).*Tel:\s*(\d+)', room.pk)
+            self.object.roomNumber = s.group(1)
+            self.object.telephoneNumber = s.group(2)
         photo = self.request.FILES.get('photo', None)
         if photo:
             path = getPhotoPath(self.object, self.object.photo.path)
@@ -67,7 +79,10 @@ class UserUpdate(UpdateView):
             imagefit.save(fileName + '-640x512.jpg', 'JPEG', quality=75)
             imagefit = ImageOps.fit(image, (200, 200), Image.ANTIALIAS)
             imagefit.save(fileName + '-200x200.jpg', 'JPEG', quality=75)
-        self.object.save(userGroups=userGroups)
+        if len(form.cleaned_data.get('userPassword1')) > 0:
+            self.object.save(userGroups=userGroups, password=form.cleaned_data.get('userPassword1'))
+        else:
+            self.object.save(userGroups=userGroups)
         return redirect(self.get_success_url())
 
 

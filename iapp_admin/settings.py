@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'iapp_user',
     'iapp_group',
     'iapp_maillist',
+    'iapp_room',
     'debug_toolbar',
 )
 

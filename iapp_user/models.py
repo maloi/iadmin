@@ -34,6 +34,7 @@ class LdapUser(ldapdb.models.Model):
     team = CharField(db_column='description', choices=settings.TEAMS, blank=True)
     photo = models.ImageField(upload_to=getPhotoPath, blank=True)
     jpegPhoto = ImageField(db_column='jpegPhoto', blank=True)
+    roomNumber = CharField(db_column='roomNumber', blank=True)
 
     # posixAccount
     uidNumber = IntegerField(db_column='uidNumber', unique=True)
@@ -46,6 +47,10 @@ class LdapUser(ldapdb.models.Model):
     deIappOrder = CharField(db_column='deIappOrder', choices=settings.ORDERINGS)
     deIappRole = CharField(db_column='deIappRole', blank=True)
     deIappBirthday = CharField(db_column='deIappBirthday', blank=True)
+
+    # sambaSamAccount
+    sambaLMPassword = CharField(db_column='sambaLMPassword')
+    sambaNTPassword = CharField(db_column='sambaNTPassword')
 
     def save(self, *args, **kwargs):
         userGroups = kwargs.pop('userGroups', [])
@@ -66,13 +71,14 @@ class LdapUser(ldapdb.models.Model):
         self.loginShell = settings.DEFAULT_SHELL
         if self.deIappBirthday:
             self.deIappBirthday = date2timestamp(self.deIappBirthday)
-        if self.userPassword:
+        password = kwargs.pop('password', False)
+        if password:
             from passlib.hash import ldap_salted_sha1 as lss
             from passlib.hash import lmhash
             from passlib.hash import nthash
-            self.userPassword = lss.encrypt(self.userPassword)
-            self.sambaLMPassword = lmhash.encrypt(self.userPassword)
-            self.sambaNTPassword = nthash.encrypt(self.userPassword)
+            self.userPassword = lss.encrypt(password)
+            self.sambaLMPassword = lmhash.encrypt(password).upper()
+            self.sambaNTPassword = nthash.encrypt(password).upper()
         super(LdapUser, self).save(*args, **kwargs)
 
     def __str__(self):
