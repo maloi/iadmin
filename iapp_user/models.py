@@ -32,7 +32,7 @@ class LdapUser(ldapdb.models.Model):
     mobile = CharField(db_column='mobile', blank=True)
     employeeType = CharField(db_column='employeeType', choices=settings.EMPLOYEETYPES, blank=True)
     team = CharField(db_column='description', choices=settings.TEAMS, blank=True)
-    photo = models.ImageField(upload_to=getPhotoPath)
+    photo = models.ImageField(upload_to=getPhotoPath, blank=True)
     jpegPhoto = ImageField(db_column='jpegPhoto', blank=True)
 
     # posixAccount
@@ -40,7 +40,7 @@ class LdapUser(ldapdb.models.Model):
     group = IntegerField(db_column='gidNumber')
     gecos =  CharField(db_column='gecos')
     uid = CharField(db_column='uid', primary_key=True)
-    password = CharField(db_column='userPassword')
+    userPassword = CharField(db_column='userPassword')
 
     # deIappPerson
     deIappOrder = CharField(db_column='deIappOrder', choices=settings.ORDERINGS)
@@ -66,6 +66,13 @@ class LdapUser(ldapdb.models.Model):
         self.loginShell = settings.DEFAULT_SHELL
         if self.deIappBirthday:
             self.deIappBirthday = date2timestamp(self.deIappBirthday)
+        if self.userPassword:
+            from passlib.hash import ldap_salted_sha1 as lss
+            from passlib.hash import lmhash
+            from passlib.hash import nthash
+            self.userPassword = lss.encrypt(self.userPassword)
+            self.sambaLMPassword = lmhash.encrypt(self.userPassword)
+            self.sambaNTPassword = nthash.encrypt(self.userPassword)
         super(LdapUser, self).save(*args, **kwargs)
 
     def __str__(self):

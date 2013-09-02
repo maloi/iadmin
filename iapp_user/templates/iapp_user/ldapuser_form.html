@@ -29,7 +29,7 @@ $(function() {
 
 {% block content %}
 <img src="{{ MEDIA_URL }}/{{ photoUrl }}"/>
-<form action="" enctype="multipart/form-data" method="post">{% csrf_token %}
+<form action="" enctype="multipart/form-data" method="post" autocomplete="off">{% csrf_token %}
     {{ form.as_p }}
     <ul id="groupList">
     {% for group in userGroups %}

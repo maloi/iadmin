@@ -32,9 +32,10 @@ class UserUpdate(UpdateView):
     form_class = LdapUserForm
 
     def get_initial(self):
-        if not self.object.deIappBirthday:
-            return {}
-        return { 'deIappBirthday': timestamp2date(self.object.deIappBirthday), }
+        initial = {}
+        if self.object.deIappBirthday:
+            initial['deIappBirthday'] = timestamp2date(self.object.deIappBirthday)
+        return initial
 
     def get_success_url(self):
         return reverse('user_detail', kwargs={'pk': self.request.POST['uid']})
@@ -50,21 +51,22 @@ class UserUpdate(UpdateView):
         self.object = form.save(commit=False)
         userGroups = self.request.POST.getlist('userGroups')
         userGroups = sorted([g for g in userGroups if g]) # filter empty strings
-        photo = self.request.FILES['photo']
-        path = getPhotoPath(self.object, self.object.photo.path)
-        absPath = settings.MEDIA_ROOT + path
-        if os.path.exists(absPath):
-            os.rename(absPath, absPath + time.strftime("-%Y%m%d-%H%M%S"))
-        self.object.photo.save(path, photo, save=False)
-        photo.open()
-        self.object.jpegPhoto = photo.read()
-        photo.close()
-        fileName, fileExtension = os.path.splitext(absPath)
-        image = Image.open(absPath)
-        imagefit = ImageOps.fit(image, (640, 512), Image.ANTIALIAS)
-        imagefit.save(fileName + '-640x512.jpg', 'JPEG', quality=75)
-        imagefit = ImageOps.fit(image, (200, 200), Image.ANTIALIAS)
-        imagefit.save(fileName + '-200x200.jpg', 'JPEG', quality=75)
+        photo = self.request.FILES.get('photo', None)
+        if photo:
+            path = getPhotoPath(self.object, self.object.photo.path)
+            absPath = settings.MEDIA_ROOT + path
+            if os.path.exists(absPath):
+                os.rename(absPath, absPath + time.strftime("-%Y%m%d-%H%M%S"))
+            self.object.photo.save(path, photo, save=False)
+            photo.open()
+            self.object.jpegPhoto = photo.read()
+            photo.close()
+            fileName, fileExtension = os.path.splitext(absPath)
+            image = Image.open(absPath)
+            imagefit = ImageOps.fit(image, (640, 512), Image.ANTIALIAS)
+            imagefit.save(fileName + '-640x512.jpg', 'JPEG', quality=75)
+            imagefit = ImageOps.fit(image, (200, 200), Image.ANTIALIAS)
+            imagefit.save(fileName + '-200x200.jpg', 'JPEG', quality=75)
         self.object.save(userGroups=userGroups)
         return redirect(self.get_success_url())
 
