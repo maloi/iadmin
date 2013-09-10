@@ -100,5 +100,5 @@ def ajax_user_autocomplete(request):
         users = LdapUser.objects.filter(
             cn__icontains=request.GET['term']
         )
-        return HttpResponse( simplejson.dumps( [ {'label': user.cn, 'value': user.uid} for user in users ] ) )
+        return HttpResponse( simplejson.dumps( [ {'label': user.cn, 'value': user.uid, 'dn': user.dn} for user in users ] ) )
     return HttpResponse()

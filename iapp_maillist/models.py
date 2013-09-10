@@ -18,7 +18,7 @@ class LdapMaillist(ldapdb.models.Model):
 
     # groupOfNames
     cn = CharField(db_column='cn', primary_key=True)
-    description =  CharField(db_column='description')
+    description =  CharField(db_column='description', blank=True)
     member = ListField(db_column='member')
 
     # extensibleObject
