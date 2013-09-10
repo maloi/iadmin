@@ -11,12 +11,11 @@
 $(function() {
     $("#addMemberInput").click(function() {
         event.preventDefault();
-        $("#memberList").append("<li><input type='text' name='membercn' value='' /><label>.</label><input type='hidden' name='member' value='' /><button>-</button></li>")
+        $("#memberList").append("<li><input type='text' name='membercn' value='' /><input type='hidden' name='member' value='' /><button>-</button></li>")
         $("#memberList li:last > input[name='membercn']").autocomplete({
             source: "{% url 'ajax_user_autocomplete' %}",
             select: function (event, ui) {
-                $(this).next().text(ui.item.label);
-                $(this).next().next().val(ui.item.dn);
+                $(this).next().val(ui.item.dn);
             }
         });
         $("#memberList li:last > button").click(function() {
@@ -32,8 +31,7 @@ $(function() {
         $("input[name='membercn']").autocomplete({
             source: "{% url 'ajax_user_autocomplete' %}",
             select: function (event, ui) {
-                $(this).next().text(ui.item.label);
-                $(this).next().next().val(ui.item.dn);
+                $(this).next().val(ui.item.dn);
             }
         });
     });
@@ -57,10 +55,11 @@ $(function() {
     <p><label for="{{ form.owner.auto_id }}">{{ form.owner.label }}: </label>{{ form.owner }}</p>
     <ul id="memberList">
     {% for member in form.member.value %}
-    <li><input type="text" name="memberuid" value="{{ member.uid }}" />
-    <label>{{ member.cn }}</label>
-    <input type="hidden" name="member" value="{{ member.dn }}" />
-    <button>-</button></li>
+    <li>
+        <input type="text" name="membercn" value="{{ member.cn }}" />
+        <input type="hidden" name="member" value="{{ member.dn }}" />
+        <button>-</button>
+    </li>
     {% endfor %}
     </ul>
     <p><button id="addMemberInput">+</button></p>

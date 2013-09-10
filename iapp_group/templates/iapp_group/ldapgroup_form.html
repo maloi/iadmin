@@ -11,12 +11,11 @@
 $(function() {
     $("#addMemberInput").click(function() {
         event.preventDefault();
-        $("#memberList").append("<li><input type='text' name='memberUid' value='' /><label>.</label><button>-</button></li>")
-        $("#memberList li:last > input").autocomplete({
+        $("#memberList").append("<li><input type='text' name='membercn' value='' /><input type='hidden' name='memberUid' value='' /><button>-</button></li>")
+        $("#memberList li:last > input[name='membercn']").autocomplete({
             source: "{% url 'ajax_user_autocomplete' %}",
             select: function (event, ui) {
-                $(this).val(ui.item.value);
-                $(this).next().text(ui.item.label);
+                $(this).next().val(ui.item.uid);
             }
         });
         $("#memberList li:last > button").click(function() {
@@ -29,16 +28,15 @@ $(function() {
         $(this).parent().remove();
     });
     $(document).ready(function () {
-        $("input[name='memberUid']").autocomplete({
+        $("input[name='membercn']").autocomplete({
             source: "{% url 'ajax_user_autocomplete' %}",
             select: function (event, ui) {
-                $(this).val(ui.item.value);
-                $(this).next().text(ui.item.label);
+                $(this).next().val(ui.item.uid);
             }
         });
     });
     $("input[value='Abschicken']").click(function() {
-        $("input[name='memberUid']").each(function() {
+        $("input[name='membercn']").each(function() {
             if ($(this).val() === '' || $(this).val() === null) {
                 $(this).parent().remove();
             }
@@ -51,21 +49,20 @@ $(function() {
 {% block content %}
 <form action="" method="post">{% csrf_token %}
     {{ form.non_field_errors }}
-    {{ form.dn.errors }}
+    {{ form.errors }}
     <p><label for="{{ form.dn.auto_id }}">{{ form.dn.label }}: </label>{{ form.dn }}</p>
-    {{ form.cn.errors }}
     <p><label for="{{ form.cn.auto_id }}">{{ form.cn.label }}: </label>{{ form.cn }}</p>
-    {{ form.gitNumber.errors }}
     <p><label for="{{ form.gidNumber.auto_id }}">{{ form.gidNumber.label }}: </label>{{ form.gidNumber }}</p>
-    {{ form.description.errors }}
     <p><label for="{{ form.description.auto_id }}">{{ form.description.label }}: </label>{{ form.description }}</p>
-    {{ form.mail.errors }}
     <p><label for="{{ form.mail.auto_id }}">{{ form.mail.label }}: </label>{{ form.mail }}</p>
-    {{ form.owner.errors }}
     <p><label for="{{ form.owner.auto_id }}">{{ form.owner.label }}: </label>{{ form.owner }}</p>
     <ul id="memberList">
     {% for member in form.memberUid.value %}
-        <li><input type="text" name="memberUid" value="{{ member.uid }}" /><label>{{ member.cn }}</label><button>-</button></li>
+    <li>
+        <input type="text" name="membercn" value="{{ member.cn }}" />
+        <input type="hidden" name="memberUid" value="{{ member.uid }}" />
+        <button>-</button>
+    </li>
     {% endfor %}
     </ul>
     <p><button id="addMemberInput">+</button></p>

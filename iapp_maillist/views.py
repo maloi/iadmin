@@ -30,8 +30,7 @@ class MaillistUpdate(UpdateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         member = self.request.POST.getlist('member')
-        debug(member)
-        self.object.member =  [m for m in member if m] # filter empty strings
+        self.object.member = list(set(member)) # remove duplicates
         self.object.save()
         return redirect(self.get_success_url())
 

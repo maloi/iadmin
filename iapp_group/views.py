@@ -18,13 +18,12 @@ class GroupUpdate(UpdateView):
     model = LdapGroup
 
     def get_initial(self):
-        sortedMembers = sorted(self.object.memberUid)
-        sortedMembersDict = []
-        for member in sortedMembers:
+        members = []
+        for member in self.object.memberUid:
             m = get_or_none(LdapUser, uid=member)
             if m:
-              sortedMembersDict.append({'cn': m.cn, 'uid': member})
-        return { 'memberUid': sortedMembersDict }
+              members.append({'cn': m.cn, 'uid': member})
+        return { 'memberUid': sorted(members, key=lambda member: member['cn']) }
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
@@ -40,7 +39,7 @@ class GroupUpdate(UpdateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         memberUid = self.request.POST.getlist('memberUid')
-        self.object.memberUid =  [m for m in memberUid if m] # filter empty strings
+        self.object.memberUid = list(set(memberUid)) # remove duplicates
         self.object.save()
         return redirect(self.get_success_url())
 
