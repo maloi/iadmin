@@ -3,5 +3,6 @@
 {% block content %}
 {{ object.cn }}
 {{ object.member }}
+{{ fullNames }}
 <a href="{% url 'maillist_edit' object.cn %}">Edit</a>
 {% endblock content %}
