@@ -32,8 +32,10 @@ class MaillistUpdate(UpdateView):
         self.object = form.save(commit=False)
         member = self.request.POST.getlist('member')
         owner = self.request.POST.getlist('owner')
+        rfc822MailMember = self.request.POST.getlist('rfc822MailMember')
         self.object.member = list(set(member)) # remove duplicates
         self.object.owner = list(set(owner)) # remove duplicates
+        self.object.rfc822MailMember = list(set(rfc822MailMember)) # remove duplicates
         self.object.save()
         return redirect(self.get_success_url())
 

@@ -37,6 +37,14 @@ $(function() {
             $(this).parent().remove();
         });
     });
+    $("#addMailMemberInput").click(function() {
+        event.preventDefault();
+        $("#externList").append("<li><input type='text' name='rfc822MailMember' value='' /><button>-</button></li>")
+        $("#externList li:last > button").click(function() {
+            event.preventDefault();
+            $(this).parent().remove();
+        });
+    });
     $("li > button").click(function() {
         event.preventDefault();
         $(this).parent().remove();
@@ -62,6 +70,11 @@ $(function() {
             }
         });
         $("input[name='ownercn']").each(function() {
+            if ($(this).val() === '' || $(this).val() === null) {
+                $(this).parent().remove();
+            }
+        });
+        $("input[name='rfc822MailMember']").each(function() {
             if ($(this).val() === '' || $(this).val() === null) {
                 $(this).parent().remove();
             }
@@ -97,6 +110,15 @@ $(function() {
     {% endfor %}
     </ul>
     <p><button id="addMemberInput">+</button></p>
+    <ul id="externList">
+    {% for member in form.rfc822MailMember.value %}
+    <li>
+        <input type="text" name="rfc822MailMember" value="{{ member }}" />
+        <button>-</button>
+    </li>
+    {% endfor %}
+    </ul>
+    <p><button id="addMailMemberInput">+</button></p>
     <input type="submit" value="Abschicken">
 </form>
 {% endblock content %}
