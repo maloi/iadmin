@@ -3,7 +3,7 @@
 {% block content %}
 <ul>
   {% for maillist in object_list %}
-  <li>{{ maillist.cn }} <a href="{% url 'maillist_detail' maillist.cn %}">Details</a> <a href="{% url 'maillist_edit' maillist.cn %}">Edit</a></li>
+  <li><a href="{% url 'maillist_detail' maillist.cn %}">{{ maillist.cn }}</a> <a href="{% url 'maillist_edit' maillist.cn %}">Edit</a></li>
   {% endfor %}
 </ul>
 {% endblock content %}
