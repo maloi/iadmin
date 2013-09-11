@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.utils import simplejson
 
 from .models import LdapGroup
+from .forms import LdapGroupForm
 from iapp_user.models import LdapUser
 from iapp_user.utils import debug, get_or_none
 
@@ -15,9 +16,17 @@ class GroupList(ListView):
 
 class GroupCreate(CreateView):
     model = LdapGroup
+    form_class = LdapGroupForm
+
+    def form_valid(self, form):
+        return _form_valid(self, form)
+
+    def get_success_url(self):
+        return _get_success_url(self)
 
 class GroupUpdate(UpdateView):
     model = LdapGroup
+    form_class = LdapGroupForm
 
     def get_initial(self):
         members = []
@@ -39,14 +48,20 @@ class GroupUpdate(UpdateView):
         return context
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        memberUid = self.request.POST.getlist('memberUid')
-        self.object.memberUid = list(set(memberUid)) # remove duplicates
-        self.object.save()
-        return redirect(self.get_success_url())
+        return _form_valid(self, form)
 
     def get_success_url(self):
-        return reverse('group_detail', kwargs={'pk': self.request.POST['cn']})
+        return _get_success_url(self)
+
+def _get_success_url(self):
+    return reverse('group_detail', kwargs={'pk': self.request.POST['cn']})
+
+def _form_valid(self, form):
+    self.object = form.save(commit=False)
+    memberUid = self.request.POST.getlist('memberUid')
+    self.object.memberUid = list(set(memberUid)) # remove duplicates
+    self.object.save()
+    return redirect(self.get_success_url())
 
 class GroupDetail(DetailView):
     model = LdapGroup

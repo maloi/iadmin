@@ -18,8 +18,9 @@ class LdapUserForm(forms.ModelForm):
 
     class Meta:
         model = LdapUser
-        exclude = ['jpegPhoto', 'roomNumber', 'telephoneNumber', 'userPassword', 
-                   'sambaNTPassword', 'sambaLMPassword']
+        exclude = ['dn', 'jpegPhoto', 'roomNumber', 'telephoneNumber', 'userPassword',
+                   'sambaNTPassword', 'sambaLMPassword', 'homeDirectory', 'loginShell',
+                   'sambaSID']
         widgets = {
             'deIappBirthday': forms.DateInput(
                 format='%d/%m/%Y',

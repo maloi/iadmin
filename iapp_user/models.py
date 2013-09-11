@@ -42,6 +42,8 @@ class LdapUser(ldapdb.models.Model):
     gecos =  CharField(db_column='gecos')
     uid = CharField(db_column='uid', primary_key=True)
     userPassword = CharField(db_column='userPassword')
+    homeDirectory = CharField(db_column='homeDirectory')
+    loginShell = CharField(db_column='loginShell')
 
     # deIappPerson
     deIappOrder = CharField(db_column='deIappOrder', choices=settings.ORDERINGS)
@@ -51,6 +53,7 @@ class LdapUser(ldapdb.models.Model):
     # sambaSamAccount
     sambaLMPassword = CharField(db_column='sambaLMPassword')
     sambaNTPassword = CharField(db_column='sambaNTPassword')
+    sambaSID = CharField(db_column='sambaSID')
 
     def save(self, *args, **kwargs):
         userGroups = kwargs.pop('userGroups', [])

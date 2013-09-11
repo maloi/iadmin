@@ -86,7 +86,8 @@ $(function() {
 
 {% block content %}
 <form action="" method="post">{% csrf_token %}
-    <p><label for="{{ form.dn.auto_id }}">{{ form.dn.label }}: </label>{{ form.dn }}</p>
+    {{ form.non_field_errors }}
+    {{ form.errors }}
     <p><label for="{{ form.cn.auto_id }}">{{ form.cn.label }}: </label>{{ form.cn }}</p>
     <p><label for="{{ form.description.auto_id }}">{{ form.description.label }}: </label>{{ form.description }}</p>
     <p><label for="{{ form.mail.auto_id }}">{{ form.mail.label }}: </label>{{ form.mail }}</p>

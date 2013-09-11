@@ -26,7 +26,13 @@ class UserList(ListView):
 
 class UserCreate(CreateView):
     model = LdapUser
+    form_class = LdapUserForm
 
+    def form_valid(self, form):
+        return _form_valid(self, form)
+
+    def get_success_url(self):
+        return _get_success_url(self)
 
 class UserUpdate(UpdateView):
     model = LdapUser
@@ -43,8 +49,6 @@ class UserUpdate(UpdateView):
             initial['room'] = room[0].pk
         return initial
 
-    def get_success_url(self):
-        return reverse('user_detail', kwargs={'pk': self.request.POST['uid']})
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
@@ -54,37 +58,45 @@ class UserUpdate(UpdateView):
         return context
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        userGroups = self.request.POST.getlist('userGroups')
-        userGroups = sorted([g for g in userGroups if g]) # filter empty strings
-        room = form.cleaned_data.get('room')
-        if room:
-            import re
-            s = re.search('([\w\s]+\w).*Tel:\s*(\d+)', room.pk)
-            self.object.roomNumber = s.group(1)
-            self.object.telephoneNumber = s.group(2)
-        photo = self.request.FILES.get('photo', None)
-        if photo:
-            path = getPhotoPath(self.object, self.object.photo.path)
-            absPath = settings.MEDIA_ROOT + path
-            if os.path.exists(absPath):
-                os.rename(absPath, absPath + time.strftime("-%Y%m%d-%H%M%S"))
-            self.object.photo.save(path, photo, save=False)
-            photo.open()
-            self.object.jpegPhoto = photo.read()
-            photo.close()
-            fileName, fileExtension = os.path.splitext(absPath)
-            image = Image.open(absPath)
-            imagefit = ImageOps.fit(image, (640, 512), Image.ANTIALIAS)
-            imagefit.save(fileName + '-640x512.jpg', 'JPEG', quality=75)
-            imagefit = ImageOps.fit(image, (200, 200), Image.ANTIALIAS)
-            imagefit.save(fileName + '-200x200.jpg', 'JPEG', quality=75)
-        if len(form.cleaned_data.get('userPassword1')) > 0:
-            self.object.save(userGroups=userGroups, password=form.cleaned_data.get('userPassword1'))
-        else:
-            self.object.save(userGroups=userGroups)
-        return redirect(self.get_success_url())
+        return _form_valid(self, form)
 
+    def get_success_url(self):
+        return _get_success_url(self)
+
+def _get_success_url(self):
+    return reverse('user_detail', kwargs={'pk': self.request.POST['uid']})
+
+def _form_valid(self, form):
+    self.object = form.save(commit=False)
+    userGroups = self.request.POST.getlist('userGroups')
+    userGroups = sorted([g for g in userGroups if g]) # filter empty strings
+    room = form.cleaned_data.get('room')
+    if room:
+        import re
+        s = re.search('([\w\s]+\w).*Tel:\s*(\d+)', room.pk)
+        self.object.roomNumber = s.group(1)
+        self.object.telephoneNumber = s.group(2)
+    photo = self.request.FILES.get('photo', None)
+    if photo:
+        path = getPhotoPath(self.object, self.object.photo.path)
+        absPath = settings.MEDIA_ROOT + path
+        if os.path.exists(absPath):
+            os.rename(absPath, absPath + time.strftime("-%Y%m%d-%H%M%S"))
+        self.object.photo.save(path, photo, save=False)
+        photo.open()
+        self.object.jpegPhoto = photo.read()
+        photo.close()
+        fileName, fileExtension = os.path.splitext(absPath)
+        image = Image.open(absPath)
+        imagefit = ImageOps.fit(image, (640, 512), Image.ANTIALIAS)
+        imagefit.save(fileName + '-640x512.jpg', 'JPEG', quality=75)
+        imagefit = ImageOps.fit(image, (200, 200), Image.ANTIALIAS)
+        imagefit.save(fileName + '-200x200.jpg', 'JPEG', quality=75)
+    if len(form.cleaned_data.get('userPassword1')) > 0:
+        self.object.save(userGroups=userGroups, password=form.cleaned_data.get('userPassword1'))
+    else:
+        self.object.save(userGroups=userGroups)
+    return redirect(self.get_success_url())
 
 class UserDetail(DetailView):
     model = LdapUser

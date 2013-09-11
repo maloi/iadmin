@@ -24,7 +24,7 @@ class LdapMaillist(ldapdb.models.Model):
     # extensibleObject
     mail = CharField(db_column='mail')
     owner = ListField(db_column='owner')
-    rfc822MailMember = ListField(db_column='rfc822MailMember')
+    rfc822MailMember = ListField(db_column='rfc822MailMember', blank=True)
 
     def __str__(self):
         return self.cn

@@ -50,7 +50,6 @@ $(function() {
 <form action="" method="post">{% csrf_token %}
     {{ form.non_field_errors }}
     {{ form.errors }}
-    <p><label for="{{ form.dn.auto_id }}">{{ form.dn.label }}: </label>{{ form.dn }}</p>
     <p><label for="{{ form.cn.auto_id }}">{{ form.cn.label }}: </label>{{ form.cn }}</p>
     <p><label for="{{ form.gidNumber.auto_id }}">{{ form.gidNumber.label }}: </label>{{ form.gidNumber }}</p>
     <p><label for="{{ form.description.auto_id }}">{{ form.description.label }}: </label>{{ form.description }}</p>
