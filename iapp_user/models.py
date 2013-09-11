@@ -38,7 +38,7 @@ class LdapUser(ldapdb.models.Model):
 
     # posixAccount
     uidNumber = IntegerField(db_column='uidNumber', unique=True)
-    group = IntegerField(db_column='gidNumber')
+    gidNumber = IntegerField(db_column='gidNumber', choices=settings.GROUPS)
     gecos =  CharField(db_column='gecos')
     uid = CharField(db_column='uid', primary_key=True)
     userPassword = CharField(db_column='userPassword')
