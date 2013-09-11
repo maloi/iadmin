@@ -3,6 +3,8 @@ from django.core.urlresolvers import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
+from django.http import HttpResponse
+from django.utils import simplejson
 
 from .models import LdapGroup
 from iapp_user.models import LdapUser
@@ -50,3 +52,10 @@ class GroupDetail(DetailView):
     model = LdapGroup
 
 
+def ajax_group_autocomplete(request):
+    if 'term' in request.GET:
+        groups = LdapGroup.objects.filter(
+            cn__icontains=request.GET['term']
+        )
+        return HttpResponse( simplejson.dumps( [ {'value': g.cn, 'label': g.cn} for g in groups ] ) )
+    return HttpResponse()

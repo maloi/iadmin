@@ -12,8 +12,13 @@ $(function() {
     $(".date").datepicker({ dateFormat: 'dd.mm.yy' });
     $("#addGroupInput").click(function() {
         event.preventDefault();
-        $("<li><input type='text' name='userGroups' value='' /><button>-</button></li>")
-            .insertBefore("#addGroupInput");
+        $("#groupList").append("<li><input type='text' name='userGroups' value='' /><button>-</button></li>")
+        $("#groupList li:last > input[name='userGroups']").autocomplete({
+            source: "{% url 'ajax_group_autocomplete' %}",
+            select: function (event, ui) {
+                $(this).val(ui.item.value);
+            }
+        });
         $("#groupList li:last > button").click(function() {
             event.preventDefault();
             $(this).parent().remove();
@@ -22,6 +27,21 @@ $(function() {
     $("li > button").click(function() {
         event.preventDefault();
         $(this).parent().remove();
+    });
+    $(document).ready(function () {
+        $("input[name='userGroups']").autocomplete({
+            source: "{% url 'ajax_group_autocomplete' %}",
+            select: function (event, ui) {
+                $(this).val(ui.item.value);
+            }
+        });
+    });
+    $("input[value='Abschicken']").click(function() {
+        $("input[name='userGroups']").each(function() {
+            if ($(this).val() === '' || $(this).val() === null) {
+                $(this).parent().remove();
+            }
+        });
     });
 });
 </script>
@@ -35,8 +55,8 @@ $(function() {
     {% for group in userGroups %}
         <li><input type="text" name="userGroups" value="{{ group.cn }}" /><button>-</button></li>
     {% endfor %}
-    <button id="addGroupInput">+</button>
     </ul>
+    <button id="addGroupInput">+</button>
     <input type="submit" value="Abschicken" />
 </form>
 {% endblock content %}
