@@ -23,6 +23,20 @@ $(function() {
             $(this).parent().remove();
         });
     });
+    $("#addOwnerInput").click(function() {
+        event.preventDefault();
+        $("#ownerList").append("<li><input type='text' name='ownercn' value='' /><input type='hidden' name='owner' value='' /><button>-</button></li>")
+        $("#ownerList li:last > input[name='ownercn']").autocomplete({
+            source: "{% url 'ajax_user_autocomplete' %}",
+            select: function (event, ui) {
+                $(this).next().val(ui.item.dn);
+            }
+        });
+        $("#ownerList li:last > button").click(function() {
+            event.preventDefault();
+            $(this).parent().remove();
+        });
+    });
     $("li > button").click(function() {
         event.preventDefault();
         $(this).parent().remove();
@@ -34,9 +48,20 @@ $(function() {
                 $(this).next().val(ui.item.dn);
             }
         });
+        $("input[name='ownercn']").autocomplete({
+            source: "{% url 'ajax_user_autocomplete' %}",
+            select: function (event, ui) {
+                $(this).next().val(ui.item.dn);
+            }
+        });
     });
     $("input[value='Abschicken']").click(function() {
         $("input[name='membercn']").each(function() {
+            if ($(this).val() === '' || $(this).val() === null) {
+                $(this).parent().remove();
+            }
+        });
+        $("input[name='ownercn']").each(function() {
             if ($(this).val() === '' || $(this).val() === null) {
                 $(this).parent().remove();
             }
@@ -52,7 +77,16 @@ $(function() {
     <p><label for="{{ form.cn.auto_id }}">{{ form.cn.label }}: </label>{{ form.cn }}</p>
     <p><label for="{{ form.description.auto_id }}">{{ form.description.label }}: </label>{{ form.description }}</p>
     <p><label for="{{ form.mail.auto_id }}">{{ form.mail.label }}: </label>{{ form.mail }}</p>
-    <p><label for="{{ form.owner.auto_id }}">{{ form.owner.label }}: </label>{{ form.owner }}</p>
+    <ul id="ownerList">
+    {% for owner in form.owner.value %}
+    <li>
+        <input type="text" name="ownercn" value="{{ owner.cn }}" />
+        <input type="hidden" name="owner" value="{{ owner.dn }}" />
+        <button>-</button>
+    </li>
+    {% endfor %}
+    </ul>
+    <p><button id="addOwnerInput">+</button></p>
     <ul id="memberList">
     {% for member in form.member.value %}
     <li>

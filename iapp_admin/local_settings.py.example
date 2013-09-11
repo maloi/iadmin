@@ -48,9 +48,9 @@ ORDERINGS = (
 )
 
 GROUPS = (
-    ("20000", "group3"),
-    ("20001", "group2"),
-    ("20002", "group1"),
+    (20000, "group3"),
+    (20001, "group2"),
+    (20002, "group1"),
 )
 
 # LDAP_AUTH

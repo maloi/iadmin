@@ -6,7 +6,7 @@ from django.views.generic.detail import DetailView
 
 from .models import LdapMaillist
 from iapp_user.models import LdapUser
-from iapp_user.utils import debug
+from iapp_user.utils import debug, get_or_none
 
 class MaillistList(ListView):
     model = LdapMaillist
@@ -18,19 +18,22 @@ class MaillistUpdate(UpdateView):
     model = LdapMaillist
 
     def get_initial(self):
+        owners = []
+        for owner in self.object.owner:
+            owners.append(LdapUser.objects.get(uid=owner.split('=')[1].split(',')[0]))
         members = []
         for member in self.object.member:
             members.append(LdapUser.objects.get(uid=member.split('=')[1].split(',')[0]))
-        return { 'member': sorted(members, key=lambda member: member.cn) }
-
-    def form_invalid(self, form):
-        debug(form.errors)
-        return self.render_to_response(self.get_context_data(form=form))
+        return { 'member': sorted(members, key=lambda member: member.cn),
+                 'owner': sorted(owners, key=lambda owner: owner.cn)
+               }
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
         member = self.request.POST.getlist('member')
+        owner = self.request.POST.getlist('owner')
         self.object.member = list(set(member)) # remove duplicates
+        self.object.owner = list(set(owner)) # remove duplicates
         self.object.save()
         return redirect(self.get_success_url())
 

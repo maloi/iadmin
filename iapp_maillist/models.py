@@ -23,7 +23,7 @@ class LdapMaillist(ldapdb.models.Model):
 
     # extensibleObject
     mail = CharField(db_column='mail')
-    owner = CharField(db_column='owner')
+    owner = ListField(db_column='owner')
 
     def __str__(self):
         return self.cn
