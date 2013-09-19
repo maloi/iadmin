@@ -1,6 +1,7 @@
 import os
 import base64
 import time
+import re
 
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
@@ -72,7 +73,6 @@ def _form_valid(self, form):
     userGroups = sorted([g for g in userGroups if g]) # filter empty strings
     room = form.cleaned_data.get('room')
     if room:
-        import re
         s = re.search('([\w\s]+\w).*Tel:\s*(\d+)', room.pk)
         self.object.roomNumber = s.group(1)
         self.object.telephoneNumber = s.group(2)

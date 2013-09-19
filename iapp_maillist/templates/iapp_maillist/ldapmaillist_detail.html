@@ -1,14 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <h4>Name</h4>
-{{ object.cn }}
+<h4>{{ object.cn }}</h4>
 <h4>Besitzer</h4>
-{{ object.owner }}
+<ul>
+{% for owner in owners %}
+  <li>{{ owner.cn }}</li>
+{% endfor %}
+</ul>
 <h4>Mitglieder</h4>
 <ul>
-{% for m in object.member %}
-  <li>{{ m }}</li>
+{% for member in members %}
+  <li>{{ member.cn }}</li>
 {% endfor %}
 </ul>
 <a href="{% url 'maillist_edit' object.cn %}"><button>Edit</button></a>
