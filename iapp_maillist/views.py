@@ -60,14 +60,13 @@ def _form_valid(self, form):
 class MaillistDetail(DetailView):
     model = LdapMaillist
 
-    def get_initial(self):
-        owners = []
+    def get_context_data(self, **kwargs):
+        context = super(MaillistDetail, self).get_context_data(**kwargs)
+        context['owners'] = []
         for owner in self.object.owner:
-            owners.append(LdapUser.objects.get(uid=owner.split('=')[1].split(',')[0]))
-        members = []
+            context['owners'].append(LdapUser.objects.get(uid=owner.split('=')[1].split(',')[0]))
+        context['members'] = []
         for member in self.object.member:
-            members.append(LdapUser.objects.get(uid=member.split('=')[1].split(',')[0]))
-        return { 'member': sorted(members, key=lambda member: member.cn),
-                 'owner': sorted(owners, key=lambda owner: owner.cn)
-               }
-            
+            context['members'].append(LdapUser.objects.get(uid=member.split('=')[1].split(',')[0]))
+        return context
+

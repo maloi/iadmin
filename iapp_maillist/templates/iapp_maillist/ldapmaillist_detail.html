@@ -2,9 +2,15 @@
 
 {% block content %}
 <h4>{{ object.cn }}</h4>
+<h4>Besitzer</h4>
+<ul>
+{% for owner in owners %}
+  <li>{{ owner.cn }}</li>
+{% endfor %}
+</ul>
 <h4>Mitglieder</h4>
 <ul>
-{% for member in object.member %}
+{% for member in members %}
   <li>{{ member.cn }}</li>
 {% endfor %}
 </ul>
