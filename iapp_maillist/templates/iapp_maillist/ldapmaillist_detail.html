@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-{{ object.cn }}
-{{ object.member }}
-{{ fullNames }}
-<a href="{% url 'maillist_edit' object.cn %}">Edit</a>
+<h4>{{ object.cn }}</h4>
+<h4>Mitglieder</h4>
+<ul>
+{% for member in object.member %}
+  <li>{{ member.cn }}</li>
+{% endfor %}
+</ul>
+<a href="{% url 'maillist_edit' object.cn %}"><button>Edit</button></a>
 {% endblock content %}
