@@ -1,20 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<h4>Name</h4>
-<h4>{{ object.cn }}</h4>
-<h4>Besitzer</h4>
-<ul>
-{% for owner in owners %}
-  <li>{{ owner.cn }}</li>
-{% endfor %}
-</ul>
-<h4>Mitglieder</h4>
-<ul>
-{% for member in members %}
-  <li>{{ member.cn }}</li>
-{% endfor %}
-</ul>
-<a href="{% url 'maillist_edit' object.cn %}"><button>Edit</button></a>
+<div id="content_wrapper">
+    <div id="nav_act"><p>Mailliste > {{ object.cn}}</p></div>
+    <div id="content">
+        <table class="t">
+            <tr>
+                <th>Besitzer</th>
+                <td>
+                    <ul class="b_list">
+                        {% for owner in owners %}
+                        <li><a href="{% url 'user_detail'  owner.uid %}">{{ owner.cn }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Mitglieder</th>
+                <td>
+                    <ul class="b_list">
+                        {% for member in members %}
+                        <li><a href="{% url 'user_detail'  member.uid %}">{{ member.cn }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><a href="{% url 'maillist_list'  %}"><button class="b_ord">Zur&uuml;ck</button></a></td>
+                <td><a href="{% url 'maillist_edit' object.cn %}"><button class="b_ord">Bearbeiten</button></a></td>
+            </tr>
+        </table>
+    </div>
+</div>
 {% endblock content %}

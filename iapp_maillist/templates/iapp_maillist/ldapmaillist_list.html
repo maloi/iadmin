@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<ul>
-  {% for maillist in object_list %}
-  <li><a href="{% url 'maillist_detail' maillist.cn %}">{{ maillist.cn }}</a> <a href="{% url 'maillist_edit' maillist.cn %}">Edit</a></li>
-  {% endfor %}
-</ul>
+<div id="content_wrapper">
+    <div id="nav_act"><p>Maillisten</p></div>
+    <div id="content">
+        <ul class="b_list">
+            {% for maillist in object_list %}
+            <li><a href="{% url 'maillist_detail' maillist.cn %}">{{ maillist.cn }}</a> <!-- <a class="b_edit" href="{% url 'maillist_edit' maillist.cn %}">Bearbeiten</a> --> </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endblock content %}

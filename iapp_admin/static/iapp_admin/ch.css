@@ -1,53 +1,225 @@
-body {
-    }
+@import url(http://fonts.googleapis.com/css?family=Montserrat);
+/*
+colors
 
-a {
+green: #1f7f5c;
+silver: #bdc3c7;
+blue: #3498db;
+
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
     text-decoration: none;
-}
-
-ul {
-    margin: 0px;
-    padding: 0px;
-}
-
-li {
-    margin: 0px;
-    padding: 0px;
-    list-style-type: none;
-}
-
-#main {
-    width: 1200px;
-    min-height: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #EDEDED;
-    list-style-type: none;
-}
+    font-family: Montserrat, sans-serif;
+    }
 
 #top {
     width: 100%;
-    height: 40px;
-    background-color: #BBBBBB;
+    height: 50px;
+    background: #212121;
+}
+
+#menu {
+    width: 1200px;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#content_wrapper {
+    width: 1200px;
+    min-height: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #f0f0f0;
 }
 
 #content {
+    width: 1140px;
+    min-height: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+#bottom{
     width: 100%;
-    list-style-type: none;
+    height: 40px;
+    background: #212121;
 }
 
-.mbutt {
-    /* display: block; */
-    width: 120px;
-    height: 100%;
+.nav {
+    height: 50px;
+    display: inline-block;
+    background: #212121;
+}
+
+.nav li {
     float: left;
-    text-decoration: none;
-    text-align: center;
-    font-size: 30px;
-    background-color: #AAAAAA;
+    position: relative;
 }
 
-.mbutt:hover {
-    background-color: #DDDDDD;
+.nav li  a {
+    line-height: 50px;
+    display: block;
+    padding: 0 26px;
+    font-size: 16px;
+    color: white;
+    border-left: 1px solid #2f2f2f;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
+.nav li a:hover{
+    background-color: #2f2f2f;
+    color: #3498db;
+}
+
+.subnav {
+    visibility: hidden;
+    position: absolute;
+    top: 110%;
+    right: 0;
+    width: 150px;
+    height: auto;
+    opacity: 0;
+    transition: all 0.1s;
+    background: #2f2f2f;
+}
+    
+.subnav li {
+    float: none;
+}
+
+.subnav li a {
+    border-bottom: 1px solid #2f2f2f;
+}
+
+#user:hover .subnav {
+    visibility: visible;
+    top: 100%;
+    opacity: 1;
+}
+
+#login {
+    width: 300px;
+    height: 120px;
+    position: absolute;
+    margin-top: 200px;
+    margin-left: 450px;
+}
+
+#nav_act {
+    width: 100%;
+    height: 40px;
+    background: #3498db;
+}
+
+#nav_act p {
+    position: absolute;
+    margin-top: 10px;
+    margin-left: 30px;
+    color: #ffffff;
+    font-size: 14px;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+/* Maillisten Darstellung Namen + Schaltflaechen */
+
+.b_list {
+    display: inline-block;
+}
+
+.b_list li a {
+    line-height: 30px;
+    width: auto;
+    display: block;
+    margin: 2px 0;
+    padding: 0 20px;
+    font-size: 14px;
+    background: #ffffff;
+    color: #212121;
+    transition: all 0.5s;
+}
+
+.b_list li a:hover {
+    color: #ffffff;
+    background: #3498db;
+    opacity: 1;
+}
+
+.b_ord {
+    width: 100%;
+    height: 30px;
+    padding: 0 10px;
+    font-size: 12px;
+    color: #b7b7b7;
+    background: #ffffff;
+    border: 2px solid #b7b7b7;
+}
+
+.b_ord:hover {
+    color: #3498db;
+    border: 2px solid #3498db;
+}
+
+.b_ord:active {
+    color: #ffffff;
+    background: #3498db;
+}
+
+.b_add {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    color: #b7b7b7;
+    background: #ffffff;
+    border: 2px solid #b7b7b7;
+}
+
+.b_add:hover {
+    color: #3498db;
+    border: 2px solid #3498db;
+}
+
+.b_add:active {
+    color: #ffffff;
+    background: #3498db;
+}
+
+.b_rem {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    color: #b7b7b7;
+    background: #ffffff;
+    border: 2px solid #b7b7b7;
+}
+
+.b_rem:hover {
+    color: #ff0000;
+    border: 2px solid #ff0000;
+}
+
+.b_rem:active {
+    color: #ffffff;
+    background: #ff0000;
+}
+
+.t th {
+    width: 100px;
+    background: #ffffff;
+    font-size: 14px;
+    padding: 10px 20px;
+    color: #3498db;
+    text-align: left;
+    vertical-align: text-top;
+    font-weight: normal;
+}
+
+.t td {
+    width: auto;
+    background: #ffffff;
+}
