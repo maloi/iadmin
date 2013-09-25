@@ -128,6 +128,7 @@ blue: #3498db;
 
 /* Maillisten Darstellung Namen + Schaltflaechen */
 
+/* schaltflaechenliste */
 .b_list {
     display: inline-block;
 }
@@ -150,6 +151,7 @@ blue: #3498db;
     opacity: 1;
 }
 
+/* schaltflaeche normal mit variablem text */
 .b_ord {
     width: 100%;
     height: 30px;
@@ -170,9 +172,30 @@ blue: #3498db;
     background: #3498db;
 }
 
+.b_ord_r {
+    width: 100%;
+    height: 30px;
+    padding: 0 10px;
+    font-size: 12px;
+    color: #b7b7b7;
+    background: #ffffff;
+    border: 2px solid #b7b7b7;
+}
+
+.b_ord_r:hover {
+    color: #ff0000;
+    border: 2px solid #ff0000;
+}
+
+.b_ord_r:active {
+    color: #ffffff;
+    background: #ff0000;
+}
+
+/* schaltflaeche hinzufuegen*/
 .b_add {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     font-size: 14px;
     color: #b7b7b7;
     background: #ffffff;
@@ -189,9 +212,10 @@ blue: #3498db;
     background: #3498db;
 }
 
+/* schaltflaeche entfernen*/
 .b_rem {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     font-size: 14px;
     color: #b7b7b7;
     background: #ffffff;
@@ -208,6 +232,7 @@ blue: #3498db;
     background: #ff0000;
 }
 
+/* tabelle */
 .t th {
     width: 100px;
     background: #ffffff;
@@ -220,6 +245,48 @@ blue: #3498db;
 }
 
 .t td {
-    width: auto;
+    min-width: 100px;
+    font-size: 14px;
     background: #ffffff;
+}
+
+.t  td p { padding: 10px 20px; }
+
+/* Eingabemethoden */
+/* input text */
+.i_ord input {
+    width: 200px;
+    height: 20px;
+    margin-bottom: 2px;
+    font-size: 14px;
+    border: 2px solid #b7b7b7;
+}
+
+.i_ord input:hover {
+    border: 2px solid #3498db;
+}
+
+.i_ord input:focus {
+    border: 2px solid #3498db;
+    background: #3498db;
+}
+
+.i_ord input:active {
+    border: 2px solid #3498db;
+}
+
+/* jquery ui */
+/* deaktiviert ergebnisinfo fuer autocomplete */
+.ui-helper-hidden-accessible { display:none; }
+
+/* autocomplete auswahl */
+.ui-menu-item {
+    width: 200px;
+    height: 20px;
+    font-size: 14px;
+    background: #ffffff;
+}
+
+.ui-menu-item:hover {
+    background: #3498db;
 }

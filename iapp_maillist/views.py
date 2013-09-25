@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 
 from .models import LdapMaillist
@@ -11,6 +11,12 @@ from iapp_user.utils import debug, get_or_none
 
 class MaillistList(ListView):
     model = LdapMaillist
+    
+    def get_context_data(self, **kwargs):
+        context = super(MaillistList, self).get_context_data(**kwargs)
+        context['maillists'] = sorted(context['ldapmaillist_list'], key=lambda ldapmaillist: ldapmaillist.cn)
+        return context
+
 
 class MaillistCreate(CreateView):
     model = LdapMaillist
@@ -22,9 +28,14 @@ class MaillistCreate(CreateView):
     def get_success_url(self):
         return _get_success_url(self)
 
+class MaillistDelete(DeleteView):
+    model = LdapMaillist
+    success_url = reverse_lazy('maillist_list')
+
 class MaillistUpdate(UpdateView):
     model = LdapMaillist
     form_class = LdapMaillistForm
+    template_name_suffix = '_update_form'
 
     def get_initial(self):
         owners = []

@@ -6,6 +6,10 @@
     <div id="content">
         <table class="t">
             <tr>
+                <th>Beschreibung</th>
+                <td><p>{{ object.description }}</p></td>
+            </tr>
+            <tr>
                 <th>Besitzer</th>
                 <td>
                     <ul class="b_list">
@@ -22,6 +26,9 @@
                         {% for member in members %}
                         <li><a href="{% url 'user_detail'  member.uid %}">{{ member.cn }}</a></li>
                         {% endfor %}
+			{% for r in object.rfc822MailMember %}
+			<li><p>{{ r }}</p></li>
+			{% endfor %}
                     </ul>
                 </td>
             </tr>

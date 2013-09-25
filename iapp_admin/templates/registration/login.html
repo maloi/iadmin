@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<div id="content_wrapper">
+    <div id="nav_act"><p>Anmelden</p></div>
+    <div id="content">
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
@@ -9,19 +11,24 @@
 <div id="login">
 <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
 {% csrf_token %}
-<table>
+<table class="t">
 <tr>
-    <td>{{ form.username.label_tag }}</td>
+    <th>{{ form.username.label_tag }}</th>
     <td>{{ form.username }}</td>
 </tr>
 <tr>
-    <td>{{ form.password.label_tag }}</td>
+    <th>{{ form.password.label_tag }}</th>
     <td>{{ form.password }}</td>
 </tr>
+<tr>
+    <td colspan="2">
+        <input class="b_ord" type="submit" value="anmelden" />
+        <input type="hidden" name="next" value="{{ next }}" />
+    </td>
+</tr>
 </table>
-
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
 </form>
+</div>
+    </div>
 </div>
 {% endblock %}

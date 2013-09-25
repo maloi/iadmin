@@ -1,8 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-{{ object.cn }}
-{{ object.gidNumber }}
-{{ object.memberUid }}
-<a href="{% url 'group_edit' object.cn %}">Edit</a>
+<div id="content_wrapper">
+    <div id="nav_act"><p>Gruppe > {{ object.cn }}</p></div>
+    <div id="content">
+        <table class="t">
+            <tr>
+                <th>Besitzer</th>
+                <td>Ich</td>
+            </tr>
+            <tr>
+                <th>Gruppennummer</th>
+                <td>{{ object.gidNumber }}</td>
+            </tr>
+            <tr>
+                <th>Mitglieder</th>
+                <td></td>
+            </tr>
+            <tr>
+                <td><a href="{% url 'group_list'  %}"><button class="b_ord">Zur&uuml;ck</button></a></td>
+                <td><a href="{% url 'group_edit' object.cn %}"><button class="b_ord">Bearbeiten</button></a></td>
+            </tr>
+        </table>
+    </div>
+</div>
 {% endblock content %}

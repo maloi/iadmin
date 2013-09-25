@@ -148,11 +148,14 @@ $(function() {
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td><a href="{% url 'maillist_detail' object.cn %}"><button class="b_ord">Zur&uuml;ck</button></a></td>
                     <td><input class="b_ord" type="submit" value="Speichern" /></td>
                 </tr>
             </table>
         </form>
+        <table class="t">
+            <tr><td><a href="{% url 'maillist_delete' object.cn %}"><button class="b_ord_r">L&ouml;schen</button></a></td></tr>
+        </table>
     </div>
 </div>
 {% endblock content %}
