@@ -24,7 +24,7 @@ urlpatterns = patterns('',
         name='maillist_edit'
     ),
     url(r'^delete/(?P<pk>[-_\w\W]+)/$',
-        login_required(MaillistDelete.as_view()),
+        owner_or_admin_required(LdapMaillist, login_required(MaillistDelete.as_view())),
         name='maillist_delete'
     ),
 )

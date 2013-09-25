@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.http import HttpResponse
 from django.utils import simplejson
@@ -13,6 +13,11 @@ from iapp_user.utils import debug, get_or_none
 
 class GroupList(ListView):
     model = LdapGroup
+    
+    def get_context_data(self, **kwargs):
+        context = super(GroupList, self).get_context_data(**kwargs)
+        context['groups'] = sorted(context['ldapgroup_list'], key=lambda ldapgroup: ldapgroup.cn)
+        return context
 
 class GroupCreate(CreateView):
     model = LdapGroup
@@ -23,6 +28,10 @@ class GroupCreate(CreateView):
 
     def get_success_url(self):
         return _get_success_url(self)
+
+class GroupDelete(DeleteView):
+    model = LdapGroup
+    success_url = reverse_lazy('group_list')
 
 class GroupUpdate(UpdateView):
     model = LdapGroup
@@ -65,7 +74,16 @@ def _form_valid(self, form):
 
 class GroupDetail(DetailView):
     model = LdapGroup
-
+    
+    def get_context_data(self, **kwargs):
+        context = super(GroupDetail, self).get_context_data(**kwargs)
+        context['owners'] = []
+        for owner in self.object.owner:
+            context['owners'].append(LdapUser.objects.get(uid=owner.split('=')[1].split(',')[0]))
+        context['members'] = []
+        for member in self.object.memberUid:
+            context['members'].append(LdapUser.objects.get(uid=member))
+        return context
 
 def ajax_group_autocomplete(request):
     if 'term' in request.GET:

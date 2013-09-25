@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="content_wrapper">
+    <div id="nav_act"><p>Mailliste > {{ object.cn }}</p></div>
+    <div id="content">
+        <form action="" method="post">{% csrf_token %}
+            <table class="t">
+                <tr>
+                    <td><p>Wollen Sie wirklich {{ object.cn }}@iapp.de l&ouml;schen?</p></td>
+                    <td><input class="b_ord_r" type="submit" value="Ja" /></td></tr>
+            </table>
+        </form>
+        <table class="t">
+            <tr>
+                <td colspan="2"><a href="{% url 'maillist_detail' object.cn %}"><button class="b_ord">Abbrechen</button></a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock content %}

@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 
-from .views import GroupList, GroupCreate, GroupDetail, GroupUpdate, ajax_group_autocomplete
+from .views import GroupList, GroupCreate, GroupDetail, GroupUpdate, GroupDelete, ajax_group_autocomplete
 from .models import LdapGroup
 from iapp_admin.decorators import admin_required, owner_or_admin_required
 
@@ -22,6 +22,10 @@ urlpatterns = patterns('',
     url(r'^edit/(?P<pk>[-_\w\W]+)/$',
         owner_or_admin_required(LdapGroup, login_required(GroupUpdate.as_view())),
         name='group_edit'
+    ),
+    url(r'^delete/(?P<pk>[-_\w\W]+)/$',
+        owner_or_admin_required(LdapGroup, login_required(GroupDelete.as_view())),
+        name='group_delete'
     ),
     url(r'^ajax/autocomplete/$',
         ajax_group_autocomplete,

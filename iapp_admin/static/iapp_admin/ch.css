@@ -48,6 +48,7 @@ blue: #3498db;
 #bottom{
     width: 100%;
     height: 40px;
+    clear:both;
     background: #212121;
 }
 
@@ -126,6 +127,10 @@ blue: #3498db;
     text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
+.fl_clear {
+    clear:both;
+}
+
 /* Maillisten Darstellung Namen + Schaltflaechen */
 
 /* schaltflaechenliste */
@@ -146,6 +151,34 @@ blue: #3498db;
 }
 
 .b_list li a:hover {
+    color: #ffffff;
+    background: #3498db;
+    opacity: 1;
+}
+
+/* schaltflaechenliste floated*/
+.b_list_fl {
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+}
+
+.b_list_fl li {
+    font-size: 14px;
+}
+
+.b_list_fl li a {
+    line-height: 30px;
+    width: auto;
+    display: block;
+    margin: 2px 0;
+    padding: 0 20px;
+    background: #ffffff;
+    color: #212121;
+    transition: all 0.5s;
+}
+
+.b_list_fl li a:hover {
     color: #ffffff;
     background: #3498db;
     opacity: 1;

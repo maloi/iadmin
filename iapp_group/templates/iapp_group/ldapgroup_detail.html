@@ -7,15 +7,27 @@
         <table class="t">
             <tr>
                 <th>Besitzer</th>
-                <td>Ich</td>
+                <td>
+                    <ul class="b_list">
+                    {% for owner in owners %}
+                        <li><a href="{% url 'user_detail' owner.uid %}">{{ owner.cn }}</a></li>
+                    {% endfor %}
+                    </ul>
+                </td>
             </tr>
             <tr>
                 <th>Gruppennummer</th>
-                <td>{{ object.gidNumber }}</td>
+                <td><p>{{ object.gidNumber }}</p></td>
             </tr>
             <tr>
                 <th>Mitglieder</th>
-                <td></td>
+                <td>
+                <ul class="b_list">
+                {% for member in members %}
+                    <li><a href="{% url 'user_detail' member.uid %}">{{ member.cn }}</a></li>
+                {% endfor %}
+                </ul>
+                </td>
             </tr>
             <tr>
                 <td><a href="{% url 'group_list'  %}"><button class="b_ord">Zur&uuml;ck</button></a></td>

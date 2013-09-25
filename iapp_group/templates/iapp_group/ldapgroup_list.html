@@ -4,11 +4,20 @@
 <div id="content_wrapper">
     <div id="nav_act"><p>Gruppen</p></div>
     <div id="content">
-        <ul class="b_list">
-            {% for group in object_list %}
-            <li><a href="{% url 'group_detail' group.cn %}">{{ group.cn}}</a></li>
-            {% endfor %}
-            </ul>
+        {% for group in groups %}
+            {% if forloop.first %}
+                <ul class="b_list_fl">
+            {% endif %}
+            {% if forloop.counter|divisibleby:30 %}
+                <li><a href="{% url 'group_detail' group.cn %}">{{ group.cn}}</a></li></ul><ul class="b_list_fl">
+            {% else %}
+                <li><a href="{% url 'group_detail' group.cn %}">{{ group.cn}}</a></li>
+            {% endif %}
+            {% if forloop.last %}
+                </ul>
+                <p class="fl_clear">Funfact: {{ forloop.counter }} Rechtegruppen!</p>
+            {% endif %}
+        {% endfor %}
     </div>
 </div>
 {% endblock content %}
