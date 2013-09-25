@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-{{ object.dn }}
-{{ object.first_name }}
-{{ user_groups }}
-<a href="{% url 'user_edit' object.uid %}">Edit</a>
+<div id="content_wrapper">
+    <div id="nav_act"><p>User > {{ object.cn }}</p></div>
+    <div id="content">
+        {{ object.dn }}
+        {{ object.first_name }}
+        {{ user_groups }}
+        <a href="{% url 'user_edit' object.uid %}">Edit</a>
+    </div>
+</div>
 {% endblock content %}

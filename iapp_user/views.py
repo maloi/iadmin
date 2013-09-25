@@ -3,7 +3,7 @@ import base64
 import time
 import re
 
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render_to_response
 from django.core.urlresolvers import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
@@ -11,18 +11,23 @@ from django.views.generic.detail import DetailView
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.conf import settings
+from django.template import RequestContext
+
 
 from PIL import Image, ImageOps
 
-from .models import LdapUser
+from .models import LdapUser, FormerLdapUser
 from .forms import LdapUserForm
 from .utils import timestamp2date, debug, getPhotoPath
-from iapp_group.models import LdapGroup
 from iapp_room.models import LdapRoom
 
 
 class UserList(ListView):
     model = LdapUser
+
+
+class FormerUserList(ListView):
+    model = FormerLdapUser
 
 
 class UserCreate(CreateView):
@@ -45,15 +50,16 @@ class UserUpdate(UpdateView):
             initial['deIappBirthday'] = timestamp2date(self.object.deIappBirthday)
         roomNumber = self.object.roomNumber
         telephoneNumber = self.object.telephoneNumber
-        room = LdapRoom.objects.filter(cn__contains=roomNumber).filter(cn__contains=telephoneNumber)
-        if len(room) > 0:
-            initial['room'] = room[0].pk
+        if roomNumber and telephoneNumber:
+            room = LdapRoom.objects.filter(cn__contains=roomNumber).filter(cn__contains=telephoneNumber)
+            if len(room) > 0:
+                initial['room'] = room[0].pk
         return initial
 
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        context['userGroups'] = LdapGroup.objects.filter(memberUid__contains=context['object'].uid)
+        context['userGroups'] = self.object.groups()
         fullname = self.object.gecos.replace(' ', '_')
         context['photoUrl'] = fullname + '/' + fullname + '-200x200.jpg'
         return context
@@ -103,9 +109,29 @@ class UserDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        context['user_groups'] = LdapGroup.objects.filter(memberUid__contains=context['object'].uid)
+        context['user_groups'] = self.object.groups()
         return context
 
+def delete_user(request, pk):
+    if request.method == 'GET':
+        return render_to_response('iapp_user/ldapuser_delete.html',
+                        { 'user': LdapUser.objects.get(pk=pk) }, context_instance=RequestContext(request))
+    elif request.method == 'POST':
+        user = LdapUser.objects.get(pk=pk)
+        for group in user.groups():
+            group.memberUid.remove(user.uid )
+            group.save()
+        user.delete()
+        return redirect(reverse('user_list'))
+
+def undelete_user(request, uidNumber):
+    if request.method == 'GET':
+        return render_to_response('iapp_user/ldapuser_undelete.html',
+                        { 'user': FormerLdapUser.objects.get(uidNumber=uidNumber) }, context_instance=RequestContext(request))
+    elif request.method == 'POST':
+        user = FormerLdapUser.objects.get(uidNumber=uidNumber)
+        user.undelete()
+        return redirect(reverse('former_user_list'))
 
 def ajax_user_autocomplete(request):
     if 'term' in request.GET:

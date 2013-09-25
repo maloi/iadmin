@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db import models
+from django.db import models, connections, router
 
 from ldapdb.models.fields import CharField, IntegerField, ListField, ImageField
 import ldapdb.models
@@ -84,10 +84,42 @@ class LdapUser(ldapdb.models.Model):
             self.sambaNTPassword = nthash.encrypt(password).upper()
         super(LdapUser, self).save(*args, **kwargs)
 
+    def delete(self, using=None):
+        """
+        Delete this entry. (move user to former-members ou)
+        """
+        using = using or router.db_for_write(self.__class__, instance=self)
+        connection = connections[using]
+        cursor = connection._cursor()
+        cursor.connection.rename_s(self.dn.encode(connection.charset),
+                                   'uid=' + self.uid.encode(connection.charset),
+                                   newsuperior='ou=Former-Members,dc=iapp-intern,dc=de')
+
+    def groups(self):
+      return LdapGroup.objects.filter(memberUid__contains=self.uid)
+
     def __str__(self):
         return self.uid
 
     def __unicode__(self):
         return self.cn
 
+
+class FormerLdapUser(LdapUser):
+    """
+    Class for representing an LDAP user entry.
+    """
+    # LDAP meta-data
+    base_dn = "ou=former-members,dc=iapp-intern,dc=de"
+
+    def undelete(self, using=None):
+        """
+        'Undelete' this entry. (move user back to people ou)
+        """
+        using = using or router.db_for_write(self.__class__, instance=self)
+        connection = connections[using]
+        cursor = connection._cursor()
+        cursor.connection.rename_s(self.dn.encode(connection.charset),
+                                   'uid=' + self.uid.encode(connection.charset),
+                                   newsuperior='ou=People,dc=iapp-intern,dc=de')
 

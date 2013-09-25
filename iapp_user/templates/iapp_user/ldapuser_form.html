@@ -48,15 +48,24 @@ $(function() {
 {% endblock js %}
 
 {% block content %}
-<img src="{{ MEDIA_URL }}/{{ photoUrl }}"/>
-<form action="" enctype="multipart/form-data" method="post" autocomplete="off">{% csrf_token %}
-    {{ form.as_p }}
-    <ul id="groupList">
-    {% for group in userGroups %}
-        <li><input type="text" name="userGroups" value="{{ group.cn }}" /><button>-</button></li>
-    {% endfor %}
-    </ul>
-    <button id="addGroupInput">+</button>
-    <input type="submit" value="Abschicken" />
-</form>
+<div id="content_wrapper">
+    <div id="nav_act"><p>User > {{ form.cn.value }}</p></div>
+    <div id="content">
+        <img src="{{ MEDIA_URL }}/{{ photoUrl }}"/>
+        <form action="" enctype="multipart/form-data" method="post" autocomplete="off">{% csrf_token %}
+            {{ form.as_p }}
+            <ul id="groupList">
+            {% for group in userGroups %}
+                <li><input type="text" name="userGroups" value="{{ group.cn }}" /><button>-</button></li>
+            {% endfor %}
+            </ul>
+            <button id="addGroupInput">+</button>
+            <input type="submit" value="Abschicken" />
+        </form>
+        <table class="t">
+            <tr><td><a href="{% url 'user_delete' object.uid %}"><button class="b_ord_r">L&ouml;schen</button></a></td></tr>
+        </table>
+    </div>
+</div>
+
 {% endblock content %}
