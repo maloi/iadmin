@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <!DOCTYPE html>
 
 <html>
@@ -16,7 +17,9 @@
             <li><a href="{% url 'user_list' %}">Benutzer</a></li>
             <li><a href="{% url 'group_list' %}">Gruppen</a></li>
             <li><a href="{% url 'maillist_list' %}">Maillisten</a></li>
+            {% if user.username|is_admin %}
             <li><a href="{% url 'former_user_list' %}">Gelöschte</a></li>
+            {% endif %}
             {% if user.is_authenticated %}
             <li id="user">
                 <a href="{% url 'user_detail' user %}">{{ user }}</a>

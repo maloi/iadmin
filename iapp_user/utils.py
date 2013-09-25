@@ -1,6 +1,8 @@
 from datetime import datetime
 from pprint import pprint
 
+from django.conf import settings
+
 def date2timestamp(dateString):
     # + ' 1' is to set the hour, since legacy ldapentries has timestamps
     # that did it this way
@@ -26,3 +28,9 @@ def getPhotoPath(instance, filename):
     fileName, fileExtension = os.path.splitext(filename)
     fullName = instance.gecos.replace(' ', '_')
     return fullName + '/' + fullName + fileExtension
+
+def is_admin(user):
+    for a in settings.ADMINS:
+        if user == a[0]:
+          return True
+    return False
