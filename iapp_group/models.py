@@ -19,11 +19,10 @@ class LdapGroup(ldapdb.models.Model):
     # posixGroup
     cn = CharField(db_column='cn', primary_key=True)
     gidNumber = IntegerField(db_column='gidNumber', unique=True)
-    description =  CharField(db_column='description')
+    description =  CharField(db_column='description', blank=True)
     memberUid = ListField(db_column='memberUid')
 
     # extensibleObject
-    mail = CharField(db_column='mail')
     owner = ListField(db_column='owner')
 
     def __str__(self):

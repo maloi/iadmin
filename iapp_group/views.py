@@ -36,14 +36,20 @@ class GroupDelete(DeleteView):
 class GroupUpdate(UpdateView):
     model = LdapGroup
     form_class = LdapGroupForm
+    template_name_suffix = '_update_form'
 
     def get_initial(self):
+        owners = []
+        for owner in self.object.owner:
+            owners.append(LdapUser.objects.get(uid=owner.split('=')[1].split(',')[0]))
         members = []
         for member in self.object.memberUid:
             m = get_or_none(LdapUser, uid=member)
             if m:
               members.append({'cn': m.cn, 'uid': member})
-        return { 'memberUid': sorted(members, key=lambda member: member['cn']) }
+        return { 'memberUid': sorted(members, key=lambda member: member['cn']),
+                    'owner': sorted(owners, key=lambda owner: owner.cn)
+                    }
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
@@ -68,7 +74,9 @@ def _get_success_url(self):
 def _form_valid(self, form):
     self.object = form.save(commit=False)
     memberUid = self.request.POST.getlist('memberUid')
+    owner = self.request.POST.getlist('owner')
     self.object.memberUid = list(set(memberUid)) # remove duplicates
+    self.object.owner = list(set(owner)) # remove duplicates
     self.object.save()
     return redirect(self.get_success_url())
 
