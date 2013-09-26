@@ -69,6 +69,7 @@ class LdapUser(ldapdb.models.Model):
                 group.memberUid.append(self.uid)
                 group.save()
 
+        self.cn = self.givenName + ' ' + self.sn
         self.sambaSID = settings.SAMBA_SID + '-' + str(self.uidNumber * 2 + 1000)
         self.homeDirectory = '/home/' + self.uid
         self.loginShell = settings.DEFAULT_SHELL

@@ -37,6 +37,16 @@ class UserCreate(CreateView):
     def form_valid(self, form):
         return _form_valid(self, form)
 
+    def get_initial(self):
+        initial = {}
+        users = LdapUser.objects.all()
+        max_uidNumber = 0
+        for user in users:
+            if user.uidNumber in xrange(max_uidNumber, 20000):
+                max_uidNumber = user.uidNumber + 1
+        initial['uidNumber'] = max_uidNumber
+        return initial
+
     def get_success_url(self):
         return _get_success_url(self)
 

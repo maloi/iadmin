@@ -1,13 +1,77 @@
 {% extends "base.html" %}
+{% load custom_filters %}
 
 {% block content %}
 <div id="content_wrapper">
-    <div id="nav_act"><p>User > {{ object.cn }}</p></div>
+  <div id="nav_act"><p>User > {{ object.cn }} > Detail</p></div>
     <div id="content">
-        {{ object.dn }}
-        {{ object.first_name }}
-        {{ user_groups }}
-        <a href="{% url 'user_edit' object.uid %}">Edit</a>
+        {% if photoUrl %}
+        <img style="float: right;" id="userPhoto" src="{{ MEDIA_URL }}/{{ photoUrl }}"/>
+        {% endif %}
+        <table class="t">
+            <tr>
+                <th>Title</th>
+                <td><p>{{ object.title }}</p></td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td><p>{{ object.givenName }} {{ object.sn }}</p></td>
+            </tr>
+            <tr>
+                <th>Raum</th>
+                <td><p>{{ object.roomNumber }}</p></td>
+            </tr>
+            <tr>
+                <th>Telefon</th>
+                <td><p>{{ object.telephoneNumber }}</p></td>
+            </tr>
+            <tr>
+                <th>Geburtstag</th>
+                <td><p>{{ object.deIappBirthday|timestamp2date }}</p></td>
+            </tr>
+            <tr>
+                <th>Mail</th>
+                <td><p>{{ object.mail }}</p></td>
+            </tr>
+            <tr>
+                <th>Mobile</th>
+                <td><p>{{ object.mobile }}</p></td>
+            </tr>
+            <tr>
+                <th>Haushaltstelle</th>
+                <td><p>{{ object.employeeType }}</p></td>
+            </tr>
+            <tr>
+                <th>Team</th>
+                <td><p>{{ object.team }}</p></td>
+            </tr>
+            <tr>
+                <th>Login (UserID)</th>
+                <td><p>{{ object.uid }} ({{ object.uidNumber }})</p></td>
+            </tr>
+            <tr>
+                <th>Nutzergruppe</th>
+                <td><p>{{ object.gidNumber }}</p></td>
+            </tr>
+            <tr>
+                <th>Rolle</th>
+                <td><p>{{ object.deIappRole }}</p></td>
+            </tr>
+            <tr>
+                <th>Gruppen</th>
+                <td>
+                    <ul class="b_list">
+                        {% for group in user_groups %}
+                        <li><a href="{% url 'group_detail'  group.cn %}">{{ group.cn }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><a href="{% url 'user_list'  %}"><button class="b_ord">Zur&uuml;ck</button></a></td>
+                <td><a href="{% url 'user_edit' object.uid %}"><button class="b_ord">Bearbeiten</button></a></td>
+            </tr>
+        </table>
     </div>
 </div>
 {% endblock content %}

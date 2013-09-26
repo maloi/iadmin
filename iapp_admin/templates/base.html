@@ -7,6 +7,8 @@
     <meta charset="UTF-8">
       {% load staticfiles%}
       <link rel='stylesheet' type='text/css' href='{% static "iapp_admin/ch.css" %}' />
+    {% block css %}
+    {% endblock css %}
     {% block js %}
     {% endblock js %}
   </head>
