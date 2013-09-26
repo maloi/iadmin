@@ -17,7 +17,6 @@ class MaillistList(ListView):
         context['maillists'] = sorted(context['ldapmaillist_list'], key=lambda ldapmaillist: ldapmaillist.cn)
         return context
 
-
 class MaillistCreate(CreateView):
     model = LdapMaillist
     form_class = LdapMaillistForm

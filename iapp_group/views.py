@@ -22,6 +22,16 @@ class GroupList(ListView):
 class GroupCreate(CreateView):
     model = LdapGroup
     form_class = LdapGroupForm
+    
+    def get_initial(self):
+        a_gid = LdapGroup.objects.all()
+        min_gid = 20000
+        max_gid = 30000
+        act = 0
+        for gid in a_gid:
+            if gid.gidNumber > act and gid.gidNumber >= min_gid and gid.gidNumber <= max_gid:
+                act = gid.gidNumber
+        return { 'gidNumber' : act + 1 }
 
     def form_valid(self, form):
         return _form_valid(self, form)
