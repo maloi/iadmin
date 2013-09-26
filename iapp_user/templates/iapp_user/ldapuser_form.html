@@ -62,9 +62,11 @@ $(function() {
             <button id="addGroupInput">+</button>
             <input type="submit" value="Abschicken" />
         </form>
+        {% if object.uid %}
         <table class="t">
             <tr><td><a href="{% url 'user_delete' object.uid %}"><button class="b_ord_r">L&ouml;schen</button></a></td></tr>
         </table>
+        {% endif %}
     </div>
 </div>
 
