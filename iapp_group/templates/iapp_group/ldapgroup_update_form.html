@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+{% endblock css %}
+
+{% block js %}
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script>
+$(function() {
+    $("#addMemberInput").click(function() {
+        event.preventDefault();
+        $("#memberList").append("<li class='i_ord'><input type='text' name='membercn' value='' /><input type='hidden' name='memberUid' value='' /> <button class='b_rem'>-</button></li>")
+        $("#memberList li:last > input[name='membercn']").autocomplete({
+            source: "{% url 'ajax_user_autocomplete' %}",
+            select: function (event, ui) {
+                $(this).next().val(ui.item.uid);
+            }
+        });
+        $("#memberList li:last > button").click(function() {
+            event.preventDefault();
+            $(this).parent().remove();
+        });
+    });
+    $("#addOwnerInput").click(function() {
+        event.preventDefault();
+        $("#ownerList").append("<li class='i_ord'><input type='text' name='ownercn' value='' /><input type='hidden' name='owner' value='' /> <button class='b_rem'>-</button></li>")
+        $("#ownerList li:last > input[name='ownercn']").autocomplete({
+            source: "{% url 'ajax_user_autocomplete' %}",
+            select: function (event, ui) {
+                $(this).next().val(ui.item.dn);
+            }
+        });
+        $("#ownerList li:last > button").click(function() {
+            event.preventDefault();
+            $(this).parent().remove();
+        });
+    });
+    $("li > button").click(function() {
+        event.preventDefault();
+        $(this).parent().remove();
+    });
+    $(document).ready(function () {
+        $("input[name='membercn']").autocomplete({
+            source: "{% url 'ajax_user_autocomplete' %}",
+            select: function (event, ui) {
+                $(this).next().val(ui.item.dn);
+            }
+        });
+        $("input[name='ownercn']").autocomplete({
+            source: "{% url 'ajax_user_autocomplete' %}",
+            select: function (event, ui) {
+                $(this).next().val(ui.item.dn);
+            }
+        });
+    });
+    $("input[value='Speichern']").click(function() {
+        $("input[name='membercn']").each(function() {
+            if ($(this).val() === '' || $(this).val() === null) {
+                $(this).parent().remove();
+            }
+        });
+        $("input[name='ownercn']").each(function() {
+            if ($(this).val() === '' || $(this).val() === null) {
+                $(this).parent().remove();
+            }
+        });
+    });
+});
+</script>
+{% endblock js %}
+
+{% block content %}
+<div id="content_wrapper">
+    <div id="nav_act"><p>Gruppe > {{ object.cn }}</p></div>
+    <div id="content">
+        <form action="" method="post">{% csrf_token %}
+            {{ form.non_field_errors }}
+            {{ form.errors }}
+            <table class="t">
+                <tr>
+                    <th><label for="{{ form.cn.auto_id }}">{{ form.cn.label }}</label></th><td class="i_ord">{{ form.cn }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.gidNumber.auto_id }}">{{ form.gidNumber.label }}</label></th><td class="i_ord">{{ form.gidNumber }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.description.auto_id }}">{{ form.description.label }}</label></th><td class="i_ord">{{ form.description }}</td>
+                </tr>
+                <tr>
+                    <th>Besitzer</th>
+                    <td>
+                        <ul id="ownerList">
+                            {% for owner in form.owner.value %}
+                            <li class="i_ord">
+                                <input type="text" name="ownercn" value="{{ owner.cn }}" />
+                                <input type="hidden" name="owner" value="{{ owner.dn }}" />
+                                <button class="b_rem">-</button>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <button class="b_add" id="addOwnerInput">+</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Mitglieder</th>
+                    <td>
+                        <ul id="memberList">
+                            {% for member in form.memberUid.value %}
+                            <li class="i_ord">
+                                <input type="text" name="membercn" value="{{ member.cn }}" />
+                                <input type="hidden" name="memberUid" value="{{ member.uid }}" />
+                                <button class="b_rem">-</button>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <button class="b_add" id="addMemberInput">+</button></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><a href="{% url 'group_detail' object.cn %}"><button class="b_ord">Zur&uuml;ck</button></a></td>
+                    <td><input class="b_ord" type="submit" value="Speichern"></td>
+                </tr>
+            </form>
+        </table>
+    </div>
+</div>
+{% endblock content %}
