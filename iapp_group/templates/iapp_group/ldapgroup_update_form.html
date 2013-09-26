@@ -115,14 +115,20 @@ $(function() {
                             </li>
                             {% endfor %}
                         </ul>
-                        <button class="b_add" id="addMemberInput">+</button></p>
+                        <button class="b_add" id="addMemberInput">+</button>
                     </td>
                 </tr>
                 <tr>
-                    <td><a href="{% url 'group_detail' object.cn %}"><button class="b_ord">Zur&uuml;ck</button></a></td>
+                    <td></td>
                     <td><input class="b_ord" type="submit" value="Speichern"></td>
                 </tr>
-            </form>
+            </table>
+        </form>
+        <table class="t_bd">
+            <tr>
+                <td><a href="{% url 'group_detail' object.cn %}"><button class="b_ord">Zur&uuml;ck</button></td>
+                <td><a href="{% url 'group_delete' object.cn %}"><button class="b_ord_r">L&ouml;schen</button></a></td>
+            </tr>
         </table>
     </div>
 </div>

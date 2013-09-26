@@ -4,20 +4,20 @@
 <div id="content_wrapper">
     <div id="nav_act"><p>Maillisten</p></div>
     <div id="content">
-            {% for maillist in maillists %}
-                {% if forloop.first %}
+        {% for maillist in maillists %}
+            {% if forloop.first %}
                 <ul class="b_list_fl">
-                {% endif %}
-                {% if forloop.counter|divisibleby:20 %}
+            {% endif %}
+            {% if forloop.counter|divisibleby:20 %}
                 <li><a href="{% url 'maillist_detail' maillist.cn %}">{{ maillist.cn }}</a></li></ul><ul class="b_list_fl">
-                {% else %}
+            {% else %}
                 <li><a href="{% url 'maillist_detail' maillist.cn %}">{{ maillist.cn }}</a></li>
-                {% endif %}
-                {% if forloop.last %}
+            {% endif %}
+            {% if forloop.last %}
                 <a href="{% url 'maillist_add' %}"><button class="b_add">+</button></a>
                 </ul>
-                {% endif %}
-            {% endfor %}
+            {% endif %}
+        {% endfor %}
     </div>
 </div>
 {% endblock content %}

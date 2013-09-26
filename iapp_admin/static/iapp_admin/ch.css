@@ -265,7 +265,7 @@ blue: #3498db;
     background: #ff0000;
 }
 
-/* tabelle */
+/* tabelle standard */
 .t th {
     width: 100px;
     background: #ffffff;
@@ -284,6 +284,15 @@ blue: #3498db;
 }
 
 .t  td p { padding: 10px 20px; }
+
+/* tabelle zurueck abbrechen */
+.t_bd td {
+    width: 140px;
+    font-size: 14px;
+    background: #ffffff;
+}
+
+.t_bd td p { padding: 10px 20px; }
 
 /* Eingabemethoden */
 /* input text */
