@@ -12,7 +12,7 @@ $(function() {
     $(".date").datepicker({ dateFormat: 'dd.mm.yy' });
     $("#addGroupInput").click(function() {
         event.preventDefault();
-        $("#groupList").append("<li><input type='text' name='userGroups' value='' /><button>-</button></li>")
+        $("#groupList").append("<li class='i_ord'><input type='text' name='userGroups' value='' /><button class='b_rem'>-</button></li>")
         $("#groupList li:last > input[name='userGroups']").autocomplete({
             source: "{% url 'ajax_group_autocomplete' %}",
             select: function (event, ui) {
@@ -49,18 +49,146 @@ $(function() {
 
 {% block content %}
 <div id="content_wrapper">
-    <div id="nav_act"><p>User > {{ form.cn.value }}</p></div>
+  <div id="nav_act"><p>User > {{ form.cn.value }} > Edit</p></div>
     <div id="content">
-        <img src="{{ MEDIA_URL }}/{{ photoUrl }}"/>
+        {% if photoUrl %}
+        <img style="float: right;" id="userPhoto" src="{{ MEDIA_URL }}/{{ photoUrl }}"/>
+        {% endif %}
         <form action="" enctype="multipart/form-data" method="post" autocomplete="off">{% csrf_token %}
-            {{ form.as_p }}
-            <ul id="groupList">
-            {% for group in userGroups %}
-                <li><input type="text" name="userGroups" value="{{ group.cn }}" /><button>-</button></li>
-            {% endfor %}
-            </ul>
-            <button id="addGroupInput">+</button>
-            <input type="submit" value="Abschicken" />
+            <table class="t">
+                <tr>
+                    <th>
+                        <label for="{{ form.title.auto_id }}">{{ form.title.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.title }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.givenName.auto_id }}">{{ form.givenName.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.givenName }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.sn.auto_id }}">{{ form.sn.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.sn }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.gecos.auto_id }}">{{ form.gecos.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.gecos }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.mail.auto_id }}">{{ form.mail.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.mail }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.mobile.auto_id }}">{{ form.mobile.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.mobile }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.facsimileTelephoneNumber.auto_id }}">{{ form.facsimileTelephoneNumber.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.facsimileTelephoneNumber }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.employeeType.auto_id }}">{{ form.employeeType.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.employeeType }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.team.auto_id }}">{{ form.team.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.team }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.photo.auto_id }}">{{ form.photo.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.photo }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.uidNumber.auto_id }}">{{ form.uidNumber.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.uidNumber }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.gidNumber.auto_id }}">{{ form.gidNumber.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.gidNumber }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.uid.auto_id }}">{{ form.uid.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.uid }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.deIappOrder.auto_id }}">{{ form.deIappOrder.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.deIappOrder }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.deIappRole.auto_id }}">{{ form.deIappRole.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.deIappRole }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.deIappBirthday.auto_id }}">{{ form.deIappBirthday.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.deIappBirthday }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.userPassword1.auto_id }}">{{ form.userPassword1.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.userPassword1 }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.userPassword2.auto_id }}">{{ form.userPassword2.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.userPassword2 }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="{{ form.room.auto_id }}">{{ form.room.label }}</label>
+                    </th>
+                    <td class="i_ord">{{ form.room }}</td>
+                </tr>
+                <tr>
+                    <th>Gruppen</th>
+                    <td>
+                    <ul id="groupList">
+                        {% for group in userGroups %}
+                        <li class="i_ord">
+                            <input type="text" name="userGroups" value="{{ group.cn }}" />
+                            <button class="b_rem">-</button>
+                        </li>
+                        {% endfor %}
+                        </ul>
+                        <button class="b_add" id="addGroupInput">+</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input class="b_ord" type="submit" value="Speichern" /></td>
+                </tr>
+            </table>
         </form>
         {% if object.uid %}
         <table class="t">
