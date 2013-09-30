@@ -5,6 +5,12 @@ from django.http import Http404
 from iapp_user.models import LdapUser
 from iapp_user.utils import debug, get_or_none, is_admin
 
+"""
+Decorators wrap functions
+This ones allow the function to be executed only if
+user is an admin or is an owner of the object
+"""
+
 def admin_required(function):
     @wraps(function)
     def decorator(request, *args, **kwargs):
