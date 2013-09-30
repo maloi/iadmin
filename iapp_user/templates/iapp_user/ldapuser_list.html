@@ -2,13 +2,22 @@
 
 {% block content %}
 <div id="content_wrapper">
-    <div id="nav_act"><p>User > Listing</p></div>
+    <div id="nav_act"><p>Benutzer</p></div>
     <div id="content">
-        <ul>
-          {% for user in object_list %}
-              <li>{{ user.cn }} <a href="{% url 'user_detail' user.uid %}">Details</a> <a href="{% url 'user_edit' user.uid %}">Edit</a></li>
-          {% endfor %}
-        </ul>
+        {% for user in object_list %}
+            {% if forloop.first %}
+                <ul class="b_list_fl">
+            {% endif %}
+            {% if forloop.counter|divisibleby:30 %}
+                <li><a href="{% url 'user_detail' user.uid %}">{{ user.cn }}</a></li></ul><ul class="b_list_fl">
+            {% else %}
+                <li><a href="{% url 'user_detail' user.uid %}">{{ user.cn }}</a></li>
+            {% endif %}
+            {% if forloop.last %}
+                </ul>
+                <p class="fl_clear"></p>
+            {% endif %}
+        {% endfor %}
     </div>
 </div>
 {% endblock content %}
