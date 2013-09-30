@@ -32,6 +32,8 @@ class LdapUser(ldapdb.models.Model):
     mobile = CharField(db_column='mobile', blank=True)
     employeeType = CharField(db_column='employeeType', choices=settings.EMPLOYEETYPES, blank=True)
     team = CharField(db_column='description', choices=settings.TEAMS, blank=True)
+    # use django imatgefield, cause the ldap one is buggy
+    # we use this one in the form and set the jpegPhoto in the view
     photo = models.ImageField(upload_to=getPhotoPath, blank=True)
     jpegPhoto = ImageField(db_column='jpegPhoto', blank=True)
     roomNumber = CharField(db_column='roomNumber', blank=True)
@@ -56,6 +58,12 @@ class LdapUser(ldapdb.models.Model):
     sambaSID = CharField(db_column='sambaSID')
 
     def save(self, *args, **kwargs):
+        """
+        save the model and set implicit attributes like sambaSID etc
+        """
+        # userGroups is given as kwarg by the view as list of strings
+        # we get the corresponding ldapgroups and check which are new
+        # and which can be deleted
         userGroups = kwargs.pop('userGroups', [])
         newUserGroups = map(lambda g: get_or_none(LdapGroup, cn=g), userGroups)
         newUserGroups = filter(None, newUserGroups)
@@ -69,12 +77,16 @@ class LdapUser(ldapdb.models.Model):
                 group.memberUid.append(self.uid)
                 group.save()
 
+        # implicit attributes
         self.cn = self.givenName + ' ' + self.sn
         self.sambaSID = settings.SAMBA_SID + '-' + str(self.uidNumber * 2 + 1000)
         self.homeDirectory = '/home/' + self.uid
         self.loginShell = settings.DEFAULT_SHELL
+        # build unix timestamp from given date format (dd.mm.yyyy)
         if self.deIappBirthday:
             self.deIappBirthday = date2timestamp(self.deIappBirthday)
+        # password is given as kwarg by the view
+        # sha1, lm/nt hashes are build from this password and will be saved
         password = kwargs.pop('password', False)
         if password:
             from passlib.hash import ldap_salted_sha1 as lss
@@ -97,7 +109,8 @@ class LdapUser(ldapdb.models.Model):
                                    newsuperior='ou=Former-Members,dc=iapp-intern,dc=de')
 
     def groups(self):
-      return LdapGroup.objects.filter(memberUid__contains=self.uid)
+        # returns the groups of a ldapuser
+        return LdapGroup.objects.filter(memberUid__contains=self.uid)
 
     def __str__(self):
         return self.uid
@@ -109,6 +122,8 @@ class LdapUser(ldapdb.models.Model):
 class FormerLdapUser(LdapUser):
     """
     Class for representing an LDAP user entry.
+    This is need, because django-ldapdb can handle only one base dn
+    and only former members can be undeleted
     """
     # LDAP meta-data
     base_dn = "ou=former-members,dc=iapp-intern,dc=de"

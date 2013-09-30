@@ -61,7 +61,7 @@
                 <th>Gruppen</th>
                 <td>
                     <ul class="b_list">
-                        {% for group in user_groups %}
+                        {% for group in object.groups %}
                         <li><a href="{% url 'group_detail'  group.cn %}">{{ group.cn }}</a></li>
                         {% endfor %}
                     </ul>

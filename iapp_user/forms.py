@@ -9,6 +9,9 @@ class LdapUserForm(forms.ModelForm):
     room = forms.ModelChoiceField(queryset=LdapRoom.objects.all())
 
     def clean(self):
+        """
+        Checks if form input is valid, password is valid if both passwords match
+        """
         cleaned_data = super(LdapUserForm, self).clean()
         password1 = self.cleaned_data.get('userPassword1')
         password2 = self.cleaned_data.get('userPassword2')
@@ -18,9 +21,13 @@ class LdapUserForm(forms.ModelForm):
 
     class Meta:
         model = LdapUser
+        # attributes, that should not be shown in form
+        # will be handled in models save() nethod
         exclude = ['dn', 'jpegPhoto', 'roomNumber', 'telephoneNumber', 'userPassword',
                    'sambaNTPassword', 'sambaLMPassword', 'homeDirectory', 'loginShell',
                    'sambaSID']
+        # sets class date, so it will be handled by jquery datepicker
+        # readonly, so it can only be modified by datepicker
         widgets = {
             'deIappBirthday': forms.DateInput(
                 format='%d/%m/%Y',

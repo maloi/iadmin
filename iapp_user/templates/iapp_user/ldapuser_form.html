@@ -178,7 +178,7 @@ $(function() {
                     <th>Gruppen</th>
                     <td>
                     <ul id="groupList">
-                        {% for group in userGroups %}
+                        {% for group in object.groups %}
                         <li class="i_ord">
                             <input type="text" name="userGroups" value="{{ group.cn }}" />
                             <button class="b_rem">-</button>
