@@ -26,11 +26,20 @@
                         {% for member in members %}
                         <li><a href="{% url 'user_detail'  member.uid %}">{{ member.cn }}</a></li>
                         {% endfor %}
-			{% for r in object.rfc822MailMember %}
-			<li><p>{{ r }}</p></li>
-			{% endfor %}
+                        {% for r in object.rfc822MailMember %}
+                            <li><p>{{ r }}</p></li>
+                        {% endfor %}
                     </ul>
                 </td>
+                {% if invalidMembers %}
+                    <td>
+                    <ul class="b_list_invalid">
+                    {% for invalid in invalidMembers %}
+                        <li><a href="{% url 'former_user_list' %}">{{ invalid }}</a></li>
+                    {% endfor %}
+                    </ul>
+                    </td>
+                {% endif %}
             </tr>
             <tr>
                 <td><a href="{% url 'maillist_list'  %}"><button class="b_ord">Zur&uuml;ck</button></a></td>
