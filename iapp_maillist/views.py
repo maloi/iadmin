@@ -42,10 +42,23 @@ class MaillistUpdate(UpdateView):
             owners.append(LdapUser.objects.get(uid=owner.split('=')[1].split(',')[0]))
         members = []
         for member in self.object.member:
-            members.append(LdapUser.objects.get(uid=member.split('=')[1].split(',')[0]))
+            m = get_or_none(LdapUser, uid=member.split('=')[1].split(',')[0])
+            if m:
+                members.append(LdapUser.objects.get(uid=member.split('=')[1].split(',')[0]))
         return { 'member': sorted(members, key=lambda member: member.cn),
-                 'owner': sorted(owners, key=lambda owner: owner.cn)
+                'owner': sorted(owners, key=lambda owner: owner.cn),
                }
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        members = self.object.member
+        invalidMembers = []
+        for member in members:
+            m = get_or_none(LdapUser, uid=member.split('=')[1].split(',')[0])
+            if not m:
+              invalidMembers.append(member.split('=')[1].split(',')[0])
+        context['invalidMembers'] = sorted(invalidMembers)
+        return context
 
     def form_valid(self, form):
         return _form_valid(self, form)
