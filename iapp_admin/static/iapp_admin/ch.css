@@ -250,8 +250,8 @@ blue: #3498db;
 
 /* schaltflaeche hinzufuegen*/
 .b_add {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     font-size: 14px;
     color: #b7b7b7;
     background: #ffffff;
@@ -270,8 +270,8 @@ blue: #3498db;
 
 /* schaltflaeche entfernen*/
 .b_rem {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     font-size: 14px;
     color: #b7b7b7;
     background: #ffffff;
@@ -322,8 +322,8 @@ blue: #3498db;
 /* input text */
 .i_ord input {
     width: 200px;
-    height: 20px;
-    margin-bottom: 2px;
+    height: 22px;
+    margin-top: 4px;
     font-size: 14px;
     border: 2px solid #b7b7b7;
 }
@@ -348,7 +348,7 @@ blue: #3498db;
 /* autocomplete auswahl */
 .ui-menu-item {
     width: 200px;
-    height: 20px;
+    height: 22px;
     font-size: 14px;
     background: #ffffff;
 }
