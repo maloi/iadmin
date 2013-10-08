@@ -129,7 +129,16 @@ $(function() {
                             {% endfor %}
                         </ul>
                         <button class="b_add" id="addMemberInput">+</button>
-                        </td>
+                    </td>
+                    {% if invalidMembers %}
+                    <td>
+                        <ul class="b_list_invalid">
+                        {% for invalid in invalidMembers %}
+                            <li><a href="{% url 'former_user_list' %}">{{ invalid }}</a></li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                {% endif %}
                 </tr>
                 <tr>
                     <th>Externe Mails</th>
