@@ -76,7 +76,14 @@ class MaillistDetail(DetailView):
         for owner in self.object.owner:
             context['owners'].append(LdapUser.objects.get(uid=owner.split('=')[1].split(',')[0]))
         context['members'] = []
+        invalidMembers = []
+        # filters for invalid entries and put it in a different list
         for member in self.object.member:
-            context['members'].append(LdapUser.objects.get(uid=member.split('=')[1].split(',')[0]))
+            m = get_or_none(LdapUser, uid=member.split('=')[1].split(',')[0])
+            if not m:
+                invalidMembers.append(member.split('=')[1].split(',')[0])
+            else:
+                context['members'].append(LdapUser.objects.get(uid=member.split('=')[1].split(',')[0]))
+        context['invalidMembers'] = sorted(invalidMembers)
         return context
 
