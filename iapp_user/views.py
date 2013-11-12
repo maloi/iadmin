@@ -102,6 +102,9 @@ def _form_valid(self, form):
         s = re.search('([\w\s]+\w).*Tel:\s*(\d+)', room.pk)
         self.object.roomNumber = s.group(1)
         self.object.telephoneNumber = s.group(2)
+    else:
+	self.object.roomNumber = ''
+	self.object.telephoneNumber = ''
     # get uploaded image
     # photos will be saved under MEDIA_ROOT/user_fullname/
     # MEDIA_ROOT is set in settings.py

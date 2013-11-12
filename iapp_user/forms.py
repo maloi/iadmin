@@ -6,7 +6,7 @@ from .utils import debug
 class LdapUserForm(forms.ModelForm):
     userPassword1 = forms.CharField(max_length=200, widget=forms.PasswordInput(), required=False)
     userPassword2 = forms.CharField(max_length=200, widget=forms.PasswordInput(), required=False)
-    room = forms.ModelChoiceField(queryset=LdapRoom.objects.all())
+    room = forms.ModelChoiceField(queryset=LdapRoom.objects.all(), required=False)
 
     def clean(self):
         """
@@ -23,7 +23,7 @@ class LdapUserForm(forms.ModelForm):
         model = LdapUser
         # attributes, that should not be shown in form
         # will be handled in models save() nethod
-        exclude = ['dn', 'jpegPhoto', 'roomNumber', 'telephoneNumber', 'userPassword',
+        exclude = ['cn', 'dn', 'jpegPhoto', 'roomNumber', 'telephoneNumber', 'userPassword',
                    'sambaNTPassword', 'sambaLMPassword', 'homeDirectory', 'loginShell',
                    'sambaSID']
         # sets class date, so it will be handled by jquery datepicker
