@@ -86,19 +86,20 @@ blue: #3498db;
     width: 150px;
     height: auto;
     opacity: 0;
-    transition: all 0.1s;
+    /* bug in chrome, subnav wird nicht angezeigt
+    transition: all 0.1s; */
     background: #2f2f2f;
 }
     
-.subnav li {
+.subnav>li {
     float: none;
 }
 
-.subnav li a {
+.subnav>li>a {
     border-bottom: 1px solid #2f2f2f;
 }
 
-#user:hover .subnav {
+#user:hover>.subnav {
     visibility: visible;
     top: 100%;
     opacity: 1;

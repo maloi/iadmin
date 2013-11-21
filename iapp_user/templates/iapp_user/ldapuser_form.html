@@ -12,7 +12,7 @@ $(function() {
     $(".date").datepicker({ dateFormat: 'dd.mm.yy' });
     $("#addGroupInput").click(function() {
         event.preventDefault();
-        $("#groupList").append("<li class='i_ord'><input type='text' name='userGroups' value='' /><button class='b_rem'>-</button></li>")
+        $("#groupList").append("<li class='i_ord'><input type='text' name='userGroups' value='' /> <button class='b_rem'>-</button></li>")
         $("#groupList li:last > input[name='userGroups']").autocomplete({
             source: "{% url 'ajax_group_autocomplete' %}",
             select: function (event, ui) {
@@ -36,7 +36,7 @@ $(function() {
             }
         });
     });
-    $("input[value='Abschicken']").click(function() {
+    $("input[value='Speichern']").click(function() {
         $("input[name='userGroups']").each(function() {
             if ($(this).val() === '' || $(this).val() === null) {
                 $(this).parent().remove();
@@ -177,13 +177,13 @@ $(function() {
                 <tr>
                     <th>Gruppen</th>
                     <td>
-                    <ul id="groupList">
-                        {% for group in object.groups %}
-                        <li class="i_ord">
-                            <input type="text" name="userGroups" value="{{ group.cn }}" />
-                            <button class="b_rem">-</button>
-                        </li>
-                        {% endfor %}
+                        <ul id="groupList">
+                            {% for group in object.groups %}
+                            <li class="i_ord">
+                                <input type="text" name="userGroups" value="{{ group.cn }}" />
+                                <button class="b_rem">-</button>
+                            </li>
+                            {% endfor %}
                         </ul>
                         <button class="b_add" id="addGroupInput">+</button>
                     </td>

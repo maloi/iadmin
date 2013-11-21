@@ -76,7 +76,7 @@ class UserUpdate(UpdateView):
         """
         context = super(self.__class__, self).get_context_data(**kwargs)
         fullname = self.object.gecos.replace(' ', '_')
-        context['photoUrl'] = fullname + '/' + fullname + '-200x200.jpg'
+        #context['photoUrl'] = fullname + '/' + fullname + '-200x200.jpg'
         return context
 
     def form_valid(self, form):
