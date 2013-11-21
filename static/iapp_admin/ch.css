@@ -86,20 +86,19 @@ blue: #3498db;
     width: 150px;
     height: auto;
     opacity: 0;
-    /* bug in chrome, subnav wird nicht angezeigt
-    transition: all 0.1s; */
+    transition: all 0.1s;
     background: #2f2f2f;
 }
     
-.subnav>li {
+.subnav li {
     float: none;
 }
 
-.subnav>li>a {
+.subnav li a {
     border-bottom: 1px solid #2f2f2f;
 }
 
-#user:hover>.subnav {
+#user:hover .subnav {
     visibility: visible;
     top: 100%;
     opacity: 1;
@@ -251,8 +250,8 @@ blue: #3498db;
 
 /* schaltflaeche hinzufuegen*/
 .b_add {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     font-size: 14px;
     color: #b7b7b7;
     background: #ffffff;
@@ -271,8 +270,8 @@ blue: #3498db;
 
 /* schaltflaeche entfernen*/
 .b_rem {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     font-size: 14px;
     color: #b7b7b7;
     background: #ffffff;
@@ -323,8 +322,8 @@ blue: #3498db;
 /* input text */
 .i_ord input {
     width: 200px;
-    height: 22px;
-    margin-top: 4px;
+    height: 20px;
+    margin-bottom: 2px;
     font-size: 14px;
     border: 2px solid #b7b7b7;
 }
@@ -349,7 +348,7 @@ blue: #3498db;
 /* autocomplete auswahl */
 .ui-menu-item {
     width: 200px;
-    height: 22px;
+    height: 20px;
     font-size: 14px;
     background: #ffffff;
 }

@@ -54,7 +54,8 @@ $(function() {
   {% else %}
   <div id="nav_act"><p>Benutzer > Erstellen</p></div>
   {% endif %}
-    <div id="content">
+     <div id="content">
+	{{ form.errors }}
         {% if photoUrl %}
         <img style="float: right;" id="userPhoto" src="{{ MEDIA_URL }}/{{ photoUrl }}"/>
         {% endif %}
